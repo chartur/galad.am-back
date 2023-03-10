@@ -10,6 +10,7 @@ import { DataTablePayloadDto } from "../../core/dto/data-table-payload.dto";
 import { TitleColumnsLanguages } from "../../core/constants/title-columns.languages";
 import { DescriptionColumnsLanguages } from "../../core/constants/description-columns.languages";
 import { PaginationResponseDto } from "../../core/dto/pagination-response.dto";
+import { SetActiveDto } from "../../core/dto/banner/set-active.dto";
 const unlinkFilePromise = promisify(fs.unlink);
 
 @Injectable()
@@ -53,6 +54,14 @@ export class BannerService {
       results: data,
       total: count,
     };
+  }
+
+  public getBanner(id: number): Promise<BannerEntity> {
+    return this.bannerEntityRepository.findOneOrFail({
+      where: {
+        id,
+      },
+    });
   }
 
   public createBanner(
@@ -106,5 +115,24 @@ export class BannerService {
     });
 
     return this.bannerEntityRepository.remove(banner).then(() => null);
+  }
+
+  public async setActiveState(
+    bannerId: number,
+    body: SetActiveDto,
+  ): Promise<void> {
+    this.logger.log("[Banner] change active state", {
+      bannerId,
+      body,
+    });
+
+    await this.bannerEntityRepository.update(
+      {
+        id: bannerId,
+      },
+      {
+        is_active: body.active,
+      },
+    );
   }
 }

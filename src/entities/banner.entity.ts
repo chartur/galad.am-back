@@ -66,6 +66,13 @@ export class BannerEntity {
   link: string;
 
   @ApiProperty({
+    example: true,
+    description: "Is banner presented in app",
+  })
+  @Column({ type: "boolean", default: true })
+  is_active: boolean;
+
+  @ApiProperty({
     example: "2011-10-05T14:48:00.000Z",
     description: "The creation date of banner",
   })

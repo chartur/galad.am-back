@@ -9,7 +9,7 @@ import { AuthModule } from "./routes/admin/auth/auth.module";
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `.${process.env.mode || "dev"}.env`,
+      envFilePath: `.${process.env.mode || "local"}.env`,
     }),
     TypeOrmModule.forRoot({
       type: "postgres",

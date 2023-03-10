@@ -30,6 +30,7 @@ import { DeleteUploadedFileOnErrorFilter } from "../../core/filters/delete-uploa
 import { DataTablePayloadDto } from "../../core/dto/data-table-payload.dto";
 import { PaginationResponseDto } from "../../core/dto/pagination-response.dto";
 import { ApiPaginatedResponse } from "../../core/decorators/api-paginated-response";
+import { SetActiveDto } from "../../core/dto/banner/set-active.dto";
 
 @Controller("banner")
 @ApiTags("Banner")
@@ -51,6 +52,20 @@ export class BannerController {
     return this.bannerService.getBanners(query);
   }
 
+  @Get(":id")
+  @ApiOperation({
+    summary: "Get banner",
+    description: "This GET request should return specific banner by ID",
+  })
+  @ApiResponse({
+    status: 200,
+    description: "The record successfully found",
+    type: BannerEntity,
+  })
+  public getBanner(@Param("id") id: number): Promise<BannerEntity> {
+    return this.bannerService.getBanner(id);
+  }
+
   @Post()
   @ApiOperation({
     summary: "Create new banner",
@@ -64,7 +79,7 @@ export class BannerController {
   })
   @UseInterceptors(
     FileInterceptor("image", {
-      storage: Uploader.fileStore("./uploads/banners"),
+      storage: Uploader.fileStore("./public/banners"),
     }),
   )
   @UseFilters(DeleteUploadedFileOnErrorFilter)
@@ -95,7 +110,7 @@ export class BannerController {
   })
   @UseInterceptors(
     FileInterceptor("image", {
-      storage: Uploader.fileStore("./uploads/banners"),
+      storage: Uploader.fileStore("./public/banners"),
     }),
   )
   @UseFilters(DeleteUploadedFileOnErrorFilter)
@@ -122,7 +137,23 @@ export class BannerController {
     status: 200,
     description: "The record successfully deleted",
   })
-  deleteBanner(@Param("id") bannerId: string): Promise<void> {
+  public deleteBanner(@Param("id") bannerId: string): Promise<void> {
     return this.bannerService.deleteBanner(bannerId);
+  }
+
+  @Put("/:id/set-active")
+  @ApiOperation({
+    summary: "Change activity",
+    description: "PUT request should change banner activity state of by ID",
+  })
+  @ApiResponse({
+    status: 200,
+    description: "The record successfully updated",
+  })
+  public setBannerActiveState(
+    @Param("id") id: number,
+    @Body() body: SetActiveDto,
+  ): Promise<void> {
+    return this.bannerService.setActiveState(id, body);
   }
 }
