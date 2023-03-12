@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 import * as fs from "fs";
+import { BannerPosition } from "../models/enums/banner-position";
 
 @Entity({ name: "banners" })
 export class BannerEntity {
@@ -71,6 +72,13 @@ export class BannerEntity {
   })
   @Column({ type: "boolean", default: true })
   is_active: boolean;
+
+  @ApiProperty({
+    example: BannerPosition.Left,
+    description: "Banner text content position (left/right)",
+  })
+  @Column({ type: "enum", enum: BannerPosition, default: BannerPosition.Left })
+  text_position: BannerPosition;
 
   @ApiProperty({
     example: "2011-10-05T14:48:00.000Z",

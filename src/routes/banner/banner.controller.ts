@@ -30,7 +30,8 @@ import { DeleteUploadedFileOnErrorFilter } from "../../core/filters/delete-uploa
 import { DataTablePayloadDto } from "../../core/dto/data-table-payload.dto";
 import { PaginationResponseDto } from "../../core/dto/pagination-response.dto";
 import { ApiPaginatedResponse } from "../../core/decorators/api-paginated-response";
-import { SetActiveDto } from "../../core/dto/banner/set-active.dto";
+import { UpdateSingleAttributeOfEntityDto } from "../../core/dto/update-single-attribute-of-entity.dto";
+import { BannerPosition } from "../../models/enums/banner-position";
 
 @Controller("banner")
 @ApiTags("Banner")
@@ -52,7 +53,21 @@ export class BannerController {
     return this.bannerService.getBanners(query);
   }
 
-  @Get(":id")
+  @Get("/actives")
+  @ApiOperation({
+    summary: "Get all active banners",
+    description: "This GET request should return all active banners",
+  })
+  @ApiResponse({
+    status: 200,
+    description: "The records successfully found",
+    type: [BannerEntity],
+  })
+  public getAllActivesBanners(): Promise<BannerEntity[]> {
+    return this.bannerService.getActiveBanners();
+  }
+
+  @Get("/:id")
   @ApiOperation({
     summary: "Get banner",
     description: "This GET request should return specific banner by ID",
@@ -96,7 +111,7 @@ export class BannerController {
     return this.bannerService.createBanner(body, file);
   }
 
-  @Put(":id")
+  @Put("/:id")
   @ApiOperation({
     summary: "Update existing banner",
     description:
@@ -128,7 +143,7 @@ export class BannerController {
     return this.bannerService.updateBanner(id, body, file);
   }
 
-  @Delete(":id")
+  @Delete("/:id")
   @ApiOperation({
     summary: "Delete banner",
     description: "This DELETE request should remove banner by ID",
@@ -141,7 +156,7 @@ export class BannerController {
     return this.bannerService.deleteBanner(bannerId);
   }
 
-  @Put("/:id/set-active")
+  @Put("/:id/update-attribute")
   @ApiOperation({
     summary: "Change activity",
     description: "PUT request should change banner activity state of by ID",
@@ -152,8 +167,8 @@ export class BannerController {
   })
   public setBannerActiveState(
     @Param("id") id: number,
-    @Body() body: SetActiveDto,
+    @Body() body: UpdateSingleAttributeOfEntityDto<BannerEntity, boolean>,
   ): Promise<void> {
-    return this.bannerService.setActiveState(id, body);
+    return this.bannerService.updateAttribute(id, body);
   }
 }
