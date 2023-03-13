@@ -131,7 +131,7 @@ export class BannerService {
     bannerId: number,
     body: UpdateSingleAttributeOfEntityDto<BannerEntity, boolean>,
   ): Promise<void> {
-    this.logger.log("[Banner] change active state", {
+    this.logger.log("[Banner] update attribute", {
       bannerId,
       body,
     });
