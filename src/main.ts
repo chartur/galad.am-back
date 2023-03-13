@@ -8,7 +8,8 @@ import { NestExpressApplication } from "@nestjs/platform-express";
 
 const swaggerSetup = (app: any, version: string): void => {
   const config = new DocumentBuilder()
-    .addServer(process.env.BASE_PATH)
+    .addServer("http://localhost:3000")
+    .addServer("http://data.galad.am")
     .setTitle("Galad")
     .setDescription("API documentation of galad.am")
     .setVersion(version)
