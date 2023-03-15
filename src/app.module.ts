@@ -5,6 +5,9 @@ import { ENTITIES } from "./entities";
 import { BannerModule } from "./routes/banner/banner.module";
 import { MulterModule } from "@nestjs/platform-express";
 import { AuthModule } from "./routes/admin/auth/auth.module";
+import { TranslatorModule } from "./routes/translator/translator.module";
+import { GTranslatorModule } from "./shared/modules/g-translator/g-translator.module";
+import { ProductModule } from "./routes/product/product.module";
 
 @Module({
   imports: [
@@ -27,6 +30,8 @@ import { AuthModule } from "./routes/admin/auth/auth.module";
     }),
     BannerModule,
     AuthModule,
+    TranslatorModule,
+    ProductModule,
   ],
   providers: [],
 })

@@ -1,9 +1,22 @@
-import { Body, Controller, Get, Headers, Post } from "@nestjs/common";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import {
+  Body,
+  Controller,
+  Get,
+  Headers,
+  Post,
+  UseGuards,
+} from "@nestjs/common";
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 import { AdminSignInDto } from "../../../core/dto/admin/admin-sign-in.dto";
 import { AuthService } from "./auth.service";
 import { AdminAuthResponseDto } from "../../../core/dto/admin/admin-auth-response.dto";
 import { AdminRegisterDto } from "../../../core/dto/admin/admin-register.dto";
+import { AdminGuard } from "../../../shared/guards/admin.guard";
 
 @ApiTags("Admin Auth")
 @Controller("auth/admin")
@@ -43,6 +56,7 @@ export class AuthController {
   }
 
   @Get("user")
+  @ApiBearerAuth()
   @ApiOperation({
     summary: "Admin user sign in",
     description:
@@ -53,9 +67,8 @@ export class AuthController {
     description: "The record found",
     type: AdminAuthResponseDto,
   })
-  public getAuthAdmin(
-    @Headers("Authorization") token: string,
-  ): AdminAuthResponseDto {
-    return this.authService.getAuthAdmin(token);
+  @UseGuards(AdminGuard)
+  public getAuthAdmin(@Headers() headers): AdminAuthResponseDto {
+    return this.authService.getAuthAdmin(headers["authorization"]);
   }
 }

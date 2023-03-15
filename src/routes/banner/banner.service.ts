@@ -25,7 +25,7 @@ export class BannerService {
   public async getBanners(
     query: DataTablePayloadDto,
   ): Promise<PaginationResponseDto<BannerEntity>> {
-    this.logger.log("[Banner] get all");
+    this.logger.log("[Banner] get all by search result", query);
 
     const findOptions = {
       skip: (query.page - 1) * query.limit,

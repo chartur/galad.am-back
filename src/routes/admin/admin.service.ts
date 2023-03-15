@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { AdminEntity } from "../../../entities/admin.entity";
 import { Repository } from "typeorm";
-import { AdminRegisterDto } from "../../../core/dto/admin/admin-register.dto";
+import { AdminEntity } from "../../entities/admin.entity";
+import { AdminRegisterDto } from "../../core/dto/admin/admin-register.dto";
 
 @Injectable()
 export class AdminService {

@@ -26,13 +26,13 @@ export class UpdateBannerDto {
   @IsNotEmpty()
   am_description: string;
 
-  @ApiProperty({ required: true, description: "English title" })
+  @ApiProperty({ required: true, description: "English description" })
   @IsOptional()
   @IsString()
   @IsNotEmpty()
   en_description: string;
 
-  @ApiProperty({ required: true, description: "Russian title" })
+  @ApiProperty({ required: true, description: "Russian description" })
   @IsOptional()
   @IsString()
   @IsNotEmpty()

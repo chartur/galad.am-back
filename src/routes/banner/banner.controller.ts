@@ -11,14 +11,16 @@ import {
   Query,
   UploadedFile,
   UseFilters,
+  UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
 import { BannerService } from "./banner.service";
 import { BannerEntity } from "../../entities/banner.entity";
 import {
+  ApiBearerAuth,
   ApiConsumes,
+  ApiExtraModels, ApiOkResponse,
   ApiOperation,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
@@ -31,14 +33,16 @@ import { DataTablePayloadDto } from "../../core/dto/data-table-payload.dto";
 import { PaginationResponseDto } from "../../core/dto/pagination-response.dto";
 import { ApiPaginatedResponse } from "../../core/decorators/api-paginated-response";
 import { UpdateSingleAttributeOfEntityDto } from "../../core/dto/update-single-attribute-of-entity.dto";
-import { BannerPosition } from "../../models/enums/banner-position";
+import { AdminGuard } from "../../shared/guards/admin.guard";
 
-@Controller("banner")
 @ApiTags("Banner")
+@ApiExtraModels(PaginationResponseDto)
+@Controller("banner")
 export class BannerController {
   constructor(private bannerService: BannerService) {}
 
   @Get()
+  @ApiBearerAuth()
   @ApiOperation({
     summary: "Get all banners",
     description: "This GET request should return all banners",
@@ -47,6 +51,7 @@ export class BannerController {
     model: BannerEntity,
     total: 3,
   })
+  @UseGuards(AdminGuard)
   public getBanners(
     @Query() query: DataTablePayloadDto,
   ): Promise<PaginationResponseDto<BannerEntity>> {
@@ -68,6 +73,7 @@ export class BannerController {
   }
 
   @Get("/:id")
+  @ApiBearerAuth()
   @ApiOperation({
     summary: "Get banner",
     description: "This GET request should return specific banner by ID",
@@ -77,11 +83,13 @@ export class BannerController {
     description: "The record successfully found",
     type: BannerEntity,
   })
+  @UseGuards(AdminGuard)
   public getBanner(@Param("id") id: number): Promise<BannerEntity> {
     return this.bannerService.getBanner(id);
   }
 
   @Post()
+  @ApiBearerAuth()
   @ApiOperation({
     summary: "Create new banner",
     description: "This POST request should create new banner then return",
@@ -92,6 +100,7 @@ export class BannerController {
     description: "The record successfully created",
     type: BannerEntity,
   })
+  @UseGuards(AdminGuard)
   @UseInterceptors(
     FileInterceptor("image", {
       storage: Uploader.fileStore("./public/banners"),
@@ -112,6 +121,7 @@ export class BannerController {
   }
 
   @Put("/:id")
+  @ApiBearerAuth()
   @ApiOperation({
     summary: "Update existing banner",
     description:
@@ -123,6 +133,7 @@ export class BannerController {
     description: "The record successfully updated",
     type: BannerEntity,
   })
+  @UseGuards(AdminGuard)
   @UseInterceptors(
     FileInterceptor("image", {
       storage: Uploader.fileStore("./public/banners"),
@@ -144,6 +155,7 @@ export class BannerController {
   }
 
   @Delete("/:id")
+  @ApiBearerAuth()
   @ApiOperation({
     summary: "Delete banner",
     description: "This DELETE request should remove banner by ID",
@@ -152,11 +164,13 @@ export class BannerController {
     status: 200,
     description: "The record successfully deleted",
   })
+  @UseGuards(AdminGuard)
   public deleteBanner(@Param("id") bannerId: string): Promise<void> {
     return this.bannerService.deleteBanner(bannerId);
   }
 
   @Put("/:id/update-attribute")
+  @ApiBearerAuth()
   @ApiOperation({
     summary: "Change activity",
     description: "PUT request should change banner activity state of by ID",
@@ -165,6 +179,7 @@ export class BannerController {
     status: 200,
     description: "The record successfully updated",
   })
+  @UseGuards(AdminGuard)
   public setBannerActiveState(
     @Param("id") id: number,
     @Body() body: UpdateSingleAttributeOfEntityDto<BannerEntity, boolean>,

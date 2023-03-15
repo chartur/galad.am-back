@@ -7,7 +7,7 @@ interface ApiPaginatedResponseProp<TModel> {
   total: number;
 }
 
-export const ApiPaginatedResponse = <TModel extends Type<any>>(
+export const ApiPaginatedResponse = <TModel extends Type>(
   data: ApiPaginatedResponseProp<TModel>,
 ) => {
   return applyDecorators(

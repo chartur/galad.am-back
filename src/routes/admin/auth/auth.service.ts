@@ -1,11 +1,11 @@
 import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
-import { AdminService } from "../../../shared/services/admin/admin.service";
 import { JwtService } from "@nestjs/jwt";
 import { AdminSignInDto } from "../../../core/dto/admin/admin-sign-in.dto";
 import * as bcrypt from "bcrypt";
 import { promisify } from "util";
 import { AdminAuthResponseDto } from "../../../core/dto/admin/admin-auth-response.dto";
 import { AdminRegisterDto } from "../../../core/dto/admin/admin-register.dto";
+import { AdminService } from "../admin.service";
 const bcryptComparePromise = promisify(bcrypt.compare);
 
 @Injectable()
@@ -27,7 +27,7 @@ export class AuthService {
     }
 
     const { password, ...payload } = admin;
-
+    console.log(payload);
     return {
       token: this.jwtService.sign(payload),
       user: payload,

@@ -22,12 +22,12 @@ export class CreateBannerDto {
   @IsNotEmpty()
   am_description: string;
 
-  @ApiProperty({ required: true, description: "English title" })
+  @ApiProperty({ required: true, description: "English description" })
   @IsString()
   @IsNotEmpty()
   en_description: string;
 
-  @ApiProperty({ required: true, description: "Russian title" })
+  @ApiProperty({ required: true, description: "Russian description" })
   @IsString()
   @IsNotEmpty()
   ru_description: string;
