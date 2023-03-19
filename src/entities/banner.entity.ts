@@ -60,7 +60,7 @@ export class BannerEntity {
   ru_description: string;
 
   @ApiProperty({
-    example: "https://galad.am/assets/images/placeholders/banners/2.jpg",
+    example: "public/banners/eb7569a5a0f2c2efc1eee74b.jpeg",
     description: "The link of banner's image",
   })
   @Column()
@@ -95,7 +95,7 @@ export class BannerEntity {
   updated_at: Date;
 
   @AfterRemove()
-  updateStatus() {
+  removeBannerImage() {
     fs.unlink(this.link, (err) => {
       if (err) {
         console.log(err);

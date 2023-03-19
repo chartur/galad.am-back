@@ -6,8 +6,9 @@ import { BannerModule } from "./routes/banner/banner.module";
 import { MulterModule } from "@nestjs/platform-express";
 import { AuthModule } from "./routes/admin/auth/auth.module";
 import { TranslatorModule } from "./routes/translator/translator.module";
-import { GTranslatorModule } from "./shared/modules/g-translator/g-translator.module";
 import { ProductModule } from "./routes/product/product.module";
+import { CategoryModule } from "./routes/category/category.module";
+import { AppController } from "./app.controller";
 
 @Module({
   imports: [
@@ -32,7 +33,9 @@ import { ProductModule } from "./routes/product/product.module";
     AuthModule,
     TranslatorModule,
     ProductModule,
+    CategoryModule,
   ],
   providers: [],
+  controllers: [AppController],
 })
 export class AppModule {}

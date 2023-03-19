@@ -1,4 +1,5 @@
 import {
+  AfterRemove,
   Column,
   CreateDateColumn,
   Entity,
@@ -9,6 +10,7 @@ import {
 import { ProductEntity } from "./product.entity";
 import { ProductAssetType } from "../models/enums/product-asset-type";
 import { ApiProperty } from "@nestjs/swagger";
+import * as fs from "fs";
 
 @Entity({ name: "product-assets" })
 export class ProductAssetEntity {
@@ -50,4 +52,15 @@ export class ProductAssetEntity {
   })
   @UpdateDateColumn()
   updated_at: Date;
+
+  @AfterRemove()
+  removeAssetFile() {
+    if (this.type === ProductAssetType.Photo) {
+      fs.unlink(this.link, (err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    }
+  }
 }

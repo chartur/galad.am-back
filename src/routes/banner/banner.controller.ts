@@ -19,7 +19,8 @@ import { BannerEntity } from "../../entities/banner.entity";
 import {
   ApiBearerAuth,
   ApiConsumes,
-  ApiExtraModels, ApiOkResponse,
+  ApiExtraModels,
+  ApiOkResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -141,7 +142,7 @@ export class BannerController {
   )
   @UseFilters(DeleteUploadedFileOnErrorFilter)
   public updateBanner(
-    @Param("id") id: string,
+    @Param("id") id: number,
     @Body() body: UpdateBannerDto,
     @UploadedFile(
       new ParseFilePipe({

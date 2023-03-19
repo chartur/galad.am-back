@@ -2,6 +2,8 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -22,8 +24,9 @@ export class ProductEntity {
     example: CategoryEntity,
     description: "The Category of product",
   })
-  @OneToOne(() => CategoryEntity, { nullable: true })
-  category: CategoryEntity;
+  @ManyToOne(() => CategoryEntity, { nullable: true })
+  @JoinColumn()
+  category?: CategoryEntity;
 
   @ApiProperty({
     example: [ProductAssetEntity],
@@ -32,7 +35,8 @@ export class ProductEntity {
   @OneToMany(() => ProductAssetEntity, (asset) => asset.product, {
     nullable: true,
   })
-  assets: ProductAssetEntity[];
+  @JoinColumn()
+  assets?: ProductAssetEntity[];
 
   @ApiProperty({
     example: "Արծաթյա շղթա",

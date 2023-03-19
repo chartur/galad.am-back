@@ -89,21 +89,23 @@ export class BannerService {
   }
 
   public async updateBanner(
-    bannerId: string,
+    bannerId: number,
     body: UpdateBannerDto,
     file?: Express.Multer.File,
   ): Promise<BannerEntity> {
     this.logger.log("[Banner] update new by ID", {
+      id: bannerId,
       body,
+      file,
     });
 
     const banner = await this.bannerEntityRepository.findOneOrFail({
       where: {
-        id: Number(bannerId),
+        id: bannerId,
       },
     });
 
-    if (file) {
+    if (file && banner.link) {
       await unlinkFilePromise(banner.link);
     }
 
