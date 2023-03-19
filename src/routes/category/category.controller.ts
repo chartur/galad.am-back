@@ -21,7 +21,10 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 import { PaginationResponseDto } from "../../core/dto/pagination-response.dto";
-import { CategoryEntity, CategoryWithProductsCount } from "../../entities/category.entity";
+import {
+  CategoryEntity,
+  CategoryWithProductsCount,
+} from "../../entities/category.entity";
 import { ApiPaginatedResponse } from "../../core/decorators/api-paginated-response";
 import { DataTablePayloadDto } from "../../core/dto/data-table-payload.dto";
 import { CategoryStatus } from "../../models/enums/category-status";

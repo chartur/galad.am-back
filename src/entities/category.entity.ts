@@ -2,7 +2,9 @@ import {
   AfterRemove,
   Column,
   CreateDateColumn,
-  Entity, JoinColumn, OneToMany,
+  Entity,
+  JoinColumn,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
