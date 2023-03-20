@@ -13,6 +13,9 @@ export class Uploader {
           path = path.replace(`:${key}`, params[key].toString());
         }
 
+        console.log(path, "FILE: PATH");
+        console.log(params, "REQ: PARAMS");
+
         fs.mkdir(path, { recursive: true }, (err) => {
           if (err) {
             throw err;
