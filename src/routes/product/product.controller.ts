@@ -150,7 +150,7 @@ export class ProductController {
   @UseGuards(AdminGuard)
   @UseInterceptors(
     FileFieldsInterceptor([{ name: "newPhotos[]", maxCount: 4 }], {
-      storage: Uploader.fileStore("./public/product-assets/:id/"),
+      storage: Uploader.fileStore(() => "./public/product-assets/:id/"),
     }),
   )
   @UseFilters(DeleteUploadedFileOnErrorFilter)

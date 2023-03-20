@@ -27,7 +27,7 @@ export class AuthService {
     }
 
     const { password, ...payload } = admin;
-    console.log(payload);
+
     return {
       token: this.jwtService.sign(payload),
       user: payload,

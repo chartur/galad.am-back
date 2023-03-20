@@ -5,16 +5,14 @@ import * as fs from "fs";
 const randomBytesPromise = promisify(crypto.randomBytes);
 
 export class Uploader {
-  static fileStore(path: string): StorageEngine {
+  static fileStore(storagePath: () => string): StorageEngine {
     return diskStorage({
       destination: (req, file, callback) => {
+        let path = storagePath();
         const params = req.params;
         for (const key in params) {
           path = path.replace(`:${key}`, params[key].toString());
         }
-
-        console.log(path, "FILE: PATH");
-        console.log(params, "REQ: PARAMS");
 
         fs.mkdir(path, { recursive: true }, (err) => {
           if (err) {

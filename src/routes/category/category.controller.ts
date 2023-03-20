@@ -104,7 +104,7 @@ export class CategoryController {
   @UseGuards(AdminGuard)
   @UseInterceptors(
     FileInterceptor("link", {
-      storage: Uploader.fileStore("./public/categories"),
+      storage: Uploader.fileStore(() => "./public/categories"),
     }),
   )
   @UseFilters(DeleteUploadedFileOnErrorFilter)
@@ -137,7 +137,7 @@ export class CategoryController {
   @UseGuards(AdminGuard)
   @UseInterceptors(
     FileInterceptor("link", {
-      storage: Uploader.fileStore("./public/categories"),
+      storage: Uploader.fileStore(() => "./public/categories"),
     }),
   )
   @UseFilters(DeleteUploadedFileOnErrorFilter)

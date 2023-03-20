@@ -104,7 +104,7 @@ export class BannerController {
   @UseGuards(AdminGuard)
   @UseInterceptors(
     FileInterceptor("image", {
-      storage: Uploader.fileStore("./public/banners"),
+      storage: Uploader.fileStore(() => "./public/banners"),
     }),
   )
   @UseFilters(DeleteUploadedFileOnErrorFilter)
@@ -137,7 +137,7 @@ export class BannerController {
   @UseGuards(AdminGuard)
   @UseInterceptors(
     FileInterceptor("image", {
-      storage: Uploader.fileStore("./public/banners"),
+      storage: Uploader.fileStore(() => "./public/banners"),
     }),
   )
   @UseFilters(DeleteUploadedFileOnErrorFilter)

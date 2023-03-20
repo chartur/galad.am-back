@@ -92,10 +92,7 @@ export class ProductService {
     });
 
     let product: ProductEntity;
-    console.log(id);
-    console.log(typeof id);
     if (id) {
-      console.log("GEXEC");
       product = await this.productEntityRepository.findOneOrFail({
         where: {
           id: Number(id),
