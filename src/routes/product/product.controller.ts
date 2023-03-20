@@ -35,6 +35,7 @@ import { FileFieldsInterceptor } from "@nestjs/platform-express";
 import { DeleteUploadedFileOnErrorFilter } from "../../core/filters/delete-uploaded-file-on-error.filter";
 import { SaveProductAssetsDto } from "../../core/dto/product/save-product-assets.dto";
 import { Uploader } from "../../utils/uploader";
+import { CategoryEntity } from "../../entities/category.entity";
 
 @ApiTags("Product")
 @ApiExtraModels(PaginationResponseDto)
@@ -57,11 +58,26 @@ export class ProductController {
     total: 3,
   })
   @UseGuards(AdminGuard)
-  public getBanners(
+  public getProductsByStatus(
     @Param("status") status: ProductStatus,
     @Query() query: DataTablePayloadDto,
   ): Promise<PaginationResponseDto<ProductEntity>> {
     return this.productService.getProductsByStatus(status, query);
+  }
+
+  @Get("/new-arrivals")
+  @ApiOperation({
+    summary: "Get new arrivals",
+    description:
+      "GET request should return products that marked as new arrival",
+  })
+  @ApiResponse({
+    status: 200,
+    type: [CategoryEntity],
+    description: "The records successfully found",
+  })
+  public getNewArrivals(): Promise<CategoryEntity[]> {
+    return this.productService.getNewArrivals();
   }
 
   @Get("/:id")

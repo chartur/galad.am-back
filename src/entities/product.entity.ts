@@ -102,6 +102,13 @@ export class ProductEntity {
   available_count: number;
 
   @ApiProperty({
+    example: false,
+    description: "The state is product new arrival",
+  })
+  @Column({ nullable: true, type: "boolean", default: false })
+  is_new_arrival: boolean;
+
+  @ApiProperty({
     example: ProductStatus.Active,
     description: "The status of product",
   })

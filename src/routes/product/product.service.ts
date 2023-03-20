@@ -13,6 +13,7 @@ import { SaveProductSettingsDto } from "../../core/dto/product/save-product-sett
 import { CategoryEntity } from "../../entities/category.entity";
 import { ProductRepository } from "../../repositories/product.repository";
 import { CategoryStatus } from "../../models/enums/category-status";
+import { take } from "rxjs";
 
 @Injectable()
 export class ProductService {
@@ -21,6 +22,8 @@ export class ProductService {
   constructor(
     @InjectRepository(ProductEntity)
     private productEntityRepository: Repository<ProductEntity>,
+    @InjectRepository(CategoryEntity)
+    private categoryEntityRepository: Repository<CategoryEntity>,
   ) {}
 
   public async getProductsByStatus(
@@ -164,7 +167,10 @@ export class ProductService {
       id: body.category,
     } as CategoryEntity;
 
-    await this.productEntityRepository.save(product);
+    await this.productEntityRepository.save({
+      ...product,
+      is_new_arrival: body.is_new_arrival,
+    });
     return this.productEntityRepository.findOneOrFail({
       where: {
         id,
@@ -280,5 +286,27 @@ export class ProductService {
       },
       relations: ["assets", "category"],
     });
+  }
+
+  public async getNewArrivals(): Promise<CategoryEntity[]> {
+    this.logger.log("[Product] get new arrivals");
+
+    const categories = await this.categoryEntityRepository
+      .createQueryBuilder("categories")
+      .leftJoinAndSelect("categories.products", "products")
+      .leftJoinAndSelect("products.assets", "assets")
+      .where("categories.status = :status", {
+        status: CategoryStatus.Active,
+      })
+      .where(
+        "products.status = :status AND products.is_new_arrival = :is_new_arrival",
+        {
+          status: ProductStatus.Active,
+          is_new_arrival: true,
+        },
+      )
+      .getMany();
+
+    return categories;
   }
 }
