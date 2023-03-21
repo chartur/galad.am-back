@@ -13,7 +13,7 @@ import { SaveProductSettingsDto } from "../../core/dto/product/save-product-sett
 import { CategoryEntity } from "../../entities/category.entity";
 import { ProductRepository } from "../../repositories/product.repository";
 import { CategoryStatus } from "../../models/enums/category-status";
-import { take } from "rxjs";
+import * as _ from "lodash";
 
 @Injectable()
 export class ProductService {
@@ -56,9 +56,7 @@ export class ProductService {
     }
 
     if (query.sortBy) {
-      findOptions["order"] = {
-        [query.sortBy]: query.order,
-      };
+      findOptions["order"] = _.set({}, query.sortBy, query.order);
     }
 
     const [data, count] = await this.productEntityRepository.findAndCount({
