@@ -12,7 +12,7 @@ import { ProductAssetType } from "../models/enums/product-asset-type";
 import { ApiProperty } from "@nestjs/swagger";
 import * as fs from "fs";
 
-@Entity({ name: "product-assets" })
+@Entity({ name: "product_assets" })
 export class ProductAssetEntity {
   @ApiProperty({ example: 1, description: "The unique ID of asset" })
   @PrimaryGeneratedColumn("increment")

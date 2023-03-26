@@ -3,9 +3,10 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
@@ -13,6 +14,7 @@ import { CategoryEntity } from "./category.entity";
 import { ProductAssetEntity } from "./product-asset.entity";
 import { ProductStatus } from "../models/enums/product-status";
 import { ApiProperty } from "@nestjs/swagger";
+import { SpecialSectionEntity } from "./special-section.entity";
 
 @Entity({ name: "products" })
 export class ProductEntity {
@@ -37,6 +39,15 @@ export class ProductEntity {
   })
   @JoinColumn()
   assets?: ProductAssetEntity[];
+
+  @ApiProperty({
+    example: [SpecialSectionEntity],
+    description: "The sections that product belongs to",
+  })
+  @ManyToMany(() => SpecialSectionEntity, (section) => section.products, {
+    nullable: true,
+  })
+  specialSections?: SpecialSectionEntity[];
 
   @ApiProperty({
     example: "Արծաթյա շղթա",

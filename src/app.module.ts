@@ -9,6 +9,7 @@ import { TranslatorModule } from "./routes/translator/translator.module";
 import { ProductModule } from "./routes/product/product.module";
 import { CategoryModule } from "./routes/category/category.module";
 import { AppController } from "./app.controller";
+import { SpecialSectionModule } from "./routes/special-section/special-section.module";
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { AppController } from "./app.controller";
     TranslatorModule,
     ProductModule,
     CategoryModule,
+    SpecialSectionModule,
   ],
   providers: [],
   controllers: [AppController],
