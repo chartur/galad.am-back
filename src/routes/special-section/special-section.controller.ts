@@ -4,7 +4,8 @@ import {
   Get,
   Param,
   Post,
-  Put, Query,
+  Put,
+  Query,
   UseGuards,
 } from "@nestjs/common";
 import {
@@ -20,7 +21,6 @@ import { AdminGuard } from "../../shared/guards/admin.guard";
 import { CreateSpecialSectionDto } from "../../core/dto/special-section/create-special-section.dto";
 import { UpdateSpecialSectionDto } from "../../core/dto/special-section/update-special-section.dto";
 import { ApiPaginatedResponse } from "../../core/decorators/api-paginated-response";
-import { CategoryEntity } from "../../entities/category.entity";
 import { PaginationResponseDto } from "../../core/dto/pagination-response.dto";
 import { DataTablePayloadDto } from "../../core/dto/data-table-payload.dto";
 

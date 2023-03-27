@@ -23,6 +23,12 @@ export class SpecialSectionService {
     this.logger.log("[SpecialSection] get actives");
 
     return this.specialSectionEntityRepository.find({
+      relations: {
+        products: {
+          assets: true,
+          category: true,
+        },
+      },
       where: {
         status: SpecialSectionStatus.Active,
       },
