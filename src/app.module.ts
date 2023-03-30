@@ -10,6 +10,7 @@ import { ProductModule } from "./routes/product/product.module";
 import { CategoryModule } from "./routes/category/category.module";
 import { AppController } from "./app.controller";
 import { SpecialSectionModule } from "./routes/special-section/special-section.module";
+import { TagModule } from "./routes/tag/tag.module";
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { SpecialSectionModule } from "./routes/special-section/special-section.m
     ProductModule,
     CategoryModule,
     SpecialSectionModule,
+    TagModule,
   ],
   providers: [],
   controllers: [AppController],

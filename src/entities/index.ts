@@ -4,6 +4,7 @@ import { ProductAssetEntity } from "./product-asset.entity";
 import { BannerEntity } from "./banner.entity";
 import { AdminEntity } from "./admin.entity";
 import { SpecialSectionEntity } from "./special-section.entity";
+import { TagEntity } from "./tag.entity";
 
 export const ENTITIES = [
   ProductEntity,
@@ -12,4 +13,5 @@ export const ENTITIES = [
   BannerEntity,
   AdminEntity,
   SpecialSectionEntity,
+  TagEntity,
 ];

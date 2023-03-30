@@ -3,7 +3,6 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -15,6 +14,7 @@ import { ProductAssetEntity } from "./product-asset.entity";
 import { ProductStatus } from "../models/enums/product-status";
 import { ApiProperty } from "@nestjs/swagger";
 import { SpecialSectionEntity } from "./special-section.entity";
+import { TagEntity } from "./tag.entity";
 
 @Entity({ name: "products" })
 export class ProductEntity {
@@ -48,6 +48,13 @@ export class ProductEntity {
     nullable: true,
   })
   specialSections?: SpecialSectionEntity[];
+
+  @ApiProperty({
+    example: [TagEntity],
+    description: "The tags that product has",
+  })
+  @ManyToMany(() => TagEntity, (tag) => tag.products)
+  tags?: TagEntity[];
 
   @ApiProperty({
     example: "Արծաթյա շղթա",
