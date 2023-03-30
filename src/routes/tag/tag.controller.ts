@@ -9,7 +9,7 @@ import {
   Query,
   UseGuards,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ApiPaginatedResponse } from "../../core/decorators/api-paginated-response";
 import { AdminGuard } from "../../shared/guards/admin.guard";
 import { DataTablePayloadDto } from "../../core/dto/data-table-payload.dto";
@@ -19,6 +19,7 @@ import { TagService } from "./tag.service";
 import { CreateTagDto } from "../../core/dto/tag/create-tag.dto";
 import { UpdateTagDto } from "../../core/dto/tag/update-tag.dto";
 
+@ApiTags("Tags")
 @Controller("tag")
 export class TagController {
   constructor(private tagService: TagService) {}
