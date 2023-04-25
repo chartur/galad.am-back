@@ -7,6 +7,7 @@ import { ProductEntity } from "../../entities/product.entity";
 import { ProductAssetEntity } from "../../entities/product-asset.entity";
 import { ProductAssetService } from "./product-asset.service";
 import { CategoryEntity } from "../../entities/category.entity";
+import { TagEntity } from "../../entities/tag.entity";
 
 @Module({
   providers: [ProductService, ProductAssetService],
@@ -16,6 +17,7 @@ import { CategoryEntity } from "../../entities/category.entity";
       ProductEntity,
       ProductAssetEntity,
       CategoryEntity,
+      TagEntity
     ]),
     GuardsModule,
   ],

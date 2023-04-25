@@ -53,7 +53,9 @@ export class ProductEntity {
     example: [TagEntity],
     description: "The tags that product has",
   })
-  @ManyToMany(() => TagEntity, (tag) => tag.products)
+  @ManyToMany(() => TagEntity, (tag) => tag.products, {
+    nullable: true,
+  })
   tags?: TagEntity[];
 
   @ApiProperty({

@@ -79,7 +79,7 @@ export class ProductService {
       where: {
         id,
       },
-      relations: ["category", "assets"],
+      relations: ["category", "assets", "tags"],
     });
   }
 
@@ -98,7 +98,7 @@ export class ProductService {
         where: {
           id: Number(id),
         },
-        relations: ["assets", "category"],
+        relations: ["assets", "category", "tags"],
       });
     } else {
       product = this.productEntityRepository.create();
@@ -114,7 +114,7 @@ export class ProductService {
       where: {
         id: productEntity.id,
       },
-      relations: ["assets", "category"],
+      relations: ["assets", "category", "tags"],
     });
   }
 
@@ -158,7 +158,7 @@ export class ProductService {
       where: {
         id,
       },
-      relations: ["assets", "category"],
+      relations: ["assets", "category", "tags"],
     });
 
     product.category = {
@@ -167,13 +167,14 @@ export class ProductService {
 
     await this.productEntityRepository.save({
       ...product,
+      tags: body.tags.map((id) => ({ id })),
       is_new_arrival: body.is_new_arrival,
     });
     return this.productEntityRepository.findOneOrFail({
       where: {
         id,
       },
-      relations: ["assets", "category"],
+      relations: ["assets", "category", "tags"],
     });
   }
 
@@ -187,7 +188,7 @@ export class ProductService {
         id,
         status: Not(ProductStatus.Active),
       },
-      relations: ["assets", "category"],
+      relations: ["assets", "category", "tags"],
     });
 
     if (product.category.status !== CategoryStatus.Active) {
@@ -210,7 +211,7 @@ export class ProductService {
       where: {
         id,
       },
-      relations: ["assets", "category"],
+      relations: ["assets", "category", "tags"],
     });
   }
 
@@ -248,7 +249,7 @@ export class ProductService {
         id,
         status: Not(ProductStatus.Deleted),
       },
-      relations: ["assets", "category"],
+      relations: ["assets", "category", "tags"],
     });
 
     product.status = ProductStatus.Deleted;
@@ -258,7 +259,7 @@ export class ProductService {
       where: {
         id,
       },
-      relations: ["assets", "category"],
+      relations: ["assets", "category", "tags"],
     });
   }
 
@@ -293,6 +294,7 @@ export class ProductService {
       .createQueryBuilder("categories")
       .leftJoinAndSelect("categories.products", "products")
       .leftJoinAndSelect("products.assets", "assets")
+      .leftJoinAndSelect("products.tags", "tags")
       .where("categories.status = :status", {
         status: CategoryStatus.Active,
       })

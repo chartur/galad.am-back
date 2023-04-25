@@ -29,7 +29,7 @@ export class TagService {
 
     const findOptions = {
       skip: (query.page - 1) * query.limit,
-      take: query.limit,
+      take: query.limit < 0 ? undefined : query.limit,
       where: whereCondition,
     };
 

@@ -27,6 +27,7 @@ export class SpecialSectionService {
         products: {
           assets: true,
           category: true,
+          tags: true,
         },
       },
       where: {

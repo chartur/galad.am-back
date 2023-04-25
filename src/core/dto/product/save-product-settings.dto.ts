@@ -1,4 +1,4 @@
-import { IsBoolean, IsNumber, IsOptional } from "class-validator";
+import { IsArray, IsBoolean, IsNumber, IsOptional } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
 
@@ -16,4 +16,12 @@ export class SaveProductSettingsDto {
   @IsOptional()
   @IsBoolean()
   is_new_arrival: boolean;
+
+  @ApiProperty({
+    required: false,
+    description: "tag ID's for product",
+  })
+  @IsArray()
+  @IsNumber({}, { each: true })
+  tags: number[];
 }

@@ -37,6 +37,13 @@ export class ProductRepository {
       });
     }
 
+    if (!product?.tags?.length) {
+      invalidFields.push({
+        filed: "tags",
+        message: "Product should has at least 1 tag selected before activation",
+      });
+    }
+
     ["price", "available_count"].forEach((key) => {
       if (!product[key]) {
         invalidFields.push({

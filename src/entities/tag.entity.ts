@@ -1,7 +1,7 @@
 import {
   Column,
   CreateDateColumn,
-  Entity,
+  Entity, JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -20,6 +20,18 @@ export class TagEntity {
     description: "The products that have the current tag",
   })
   @ManyToMany(() => ProductEntity, (product) => product.tags)
+  @JoinTable({
+    name: "product_tags",
+    joinColumn: {
+      name: "tagId",
+      referencedColumnName: "id",
+    },
+    inverseJoinColumn: {
+      name: "productId",
+      referencedColumnName: "id",
+    },
+    synchronize: true,
+  })
   products?: ProductEntity[];
 
   @ApiProperty({
