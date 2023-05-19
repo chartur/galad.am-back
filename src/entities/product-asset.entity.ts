@@ -40,6 +40,13 @@ export class ProductAssetEntity {
   type: ProductAssetType;
 
   @ApiProperty({
+    example: true,
+    description: "Is the image mentioned as main image of product",
+  })
+  @Column({ default: false })
+  is_main: boolean;
+
+  @ApiProperty({
     example: "2011-10-05T14:48:00.000Z",
     description: "The creation date of asset",
   })

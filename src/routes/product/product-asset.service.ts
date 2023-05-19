@@ -96,7 +96,37 @@ export class ProductAssetService {
 
     product.assets = assets;
 
+    // Set fist image as main image of product
+    if (
+      !product.assets.some(
+        (asset) => asset.type === ProductAssetType.Photo && asset.is_main,
+      )
+    ) {
+      const firstPhotoAsset = product.assets.find(
+        (asset) => asset.type === ProductAssetType.Photo,
+      );
+      firstPhotoAsset.is_main = true;
+      await this.productAssetEntityRepository.save(firstPhotoAsset);
+    }
+
     await this.productEntityRepository.save(product);
     return this.productEntityRepository.preload(product);
+  }
+
+  public async setMainImage(productId: number, assetId: number): Promise<void> {
+    this.logger.log("[Product] set main image", {
+      productId,
+      assetId,
+    });
+
+    await this.productAssetEntityRepository.update(
+      { product: { id: productId } },
+      { is_main: false },
+    );
+
+    await this.productAssetEntityRepository.update(
+      { product: { id: productId }, id: assetId },
+      { is_main: true },
+    );
   }
 }

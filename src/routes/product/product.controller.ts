@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -180,6 +181,25 @@ export class ProductController {
       body,
       files["newPhotos[]"],
     );
+  }
+
+  @Patch("/:id/assets/main/:assetId")
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: "Set main image",
+    description:
+      "PATCH request should make image as main image of current product",
+  })
+  @ApiResponse({
+    status: 200,
+    description: "The record successfully updated",
+  })
+  @UseGuards(AdminGuard)
+  public setMainImage(
+    @Param("id") id: number,
+    @Param("assetId") assetId: number,
+  ): Promise<void> {
+    return this.productAssetService.setMainImage(id, assetId);
   }
 
   @Put("/activate/:id")
