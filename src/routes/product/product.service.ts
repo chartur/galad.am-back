@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ProductEntity } from "../../entities/product.entity";
-import { Like, Not, Repository } from "typeorm";
+import { ILike, Not, Repository } from "typeorm";
 import { SaveProductContentDto } from "../../core/dto/product/save-product-content.dto";
 import { ProductStatus } from "../../models/enums/product-status";
 import { DataTablePayloadDto } from "../../core/dto/data-table-payload.dto";
@@ -51,7 +51,7 @@ export class ProductService {
         ...DescriptionColumnsLanguages,
       ].map((column) => ({
         ...whereCondition,
-        [column]: Like(`%${query.filter}%`),
+        [column]: ILike(`%${query.filter.trim()}%`),
       }));
     }
 

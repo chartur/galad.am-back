@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { SpecialSectionStatus } from "../../models/enums/special-section-status";
 import { SpecialSectionEntity } from "../../entities/special-section.entity";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Like, Repository } from "typeorm";
+import { ILike, Repository } from "typeorm";
 import { CreateSpecialSectionDto } from "../../core/dto/special-section/create-special-section.dto";
 import { SpecialSectionRepository } from "../../repositories/special-section.repository";
 import { PaginationResponseDto } from "../../core/dto/pagination-response.dto";
@@ -58,7 +58,7 @@ export class SpecialSectionService {
     if (query.filter) {
       findOptions["where"] = [...TitleColumnsLanguages].map((column) => ({
         ...whereCondition,
-        [column]: Like(`%${query.filter}%`),
+        [column]: ILike(`%${query.filter.trim()}%`),
       }));
     }
 

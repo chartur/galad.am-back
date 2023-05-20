@@ -1,5 +1,5 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { Like, Repository } from "typeorm";
+import { ILike, Repository } from "typeorm";
 import { BannerEntity } from "../../entities/banner.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateBannerDto } from "../../core/dto/banner/create-banner.dto";
@@ -37,7 +37,7 @@ export class BannerService {
         ...TitleColumnsLanguages,
         ...DescriptionColumnsLanguages,
       ].map((column) => ({
-        [column]: Like(`%${query.filter}%`),
+        [column]: ILike(`%${query.filter.trim()}%`),
       }));
     }
 

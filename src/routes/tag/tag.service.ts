@@ -2,7 +2,7 @@ import { Injectable, Logger } from "@nestjs/common";
 import { DataTablePayloadDto } from "../../core/dto/data-table-payload.dto";
 import { PaginationResponseDto } from "../../core/dto/pagination-response.dto";
 import { NameColumnsLanguages } from "../../core/constants/name-columns.languages";
-import { Like, Repository } from "typeorm";
+import { ILike, Repository } from "typeorm";
 import * as _ from "lodash";
 import { InjectRepository } from "@nestjs/typeorm";
 import { TagEntity } from "../../entities/tag.entity";
@@ -36,7 +36,7 @@ export class TagService {
     if (query.filter) {
       findOptions["where"] = [...NameColumnsLanguages].map((column) => ({
         ...whereCondition,
-        [column]: Like(`%${query.filter}%`),
+        [column]: ILike(`%${query.filter.trim()}%`),
       }));
     }
 

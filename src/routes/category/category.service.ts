@@ -3,7 +3,7 @@ import { DataTablePayloadDto } from "../../core/dto/data-table-payload.dto";
 import { PaginationResponseDto } from "../../core/dto/pagination-response.dto";
 import { NameColumnsLanguages } from "../../core/constants/name-columns.languages";
 import { DescriptionColumnsLanguages } from "../../core/constants/description-columns.languages";
-import { Like, Not, Repository } from "typeorm";
+import { ILike, Not, Repository } from "typeorm";
 import { CategoryStatus } from "../../models/enums/category-status";
 import {
   CategoryEntity,
@@ -56,7 +56,7 @@ export class CategoryService {
         ...DescriptionColumnsLanguages,
       ].map((column) => ({
         ...whereCondition,
-        [column]: Like(`%${query.filter}%`),
+        [column]: ILike(`%${query.filter.trim()}%`),
       }));
     }
 

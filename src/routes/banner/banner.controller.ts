@@ -20,7 +20,6 @@ import {
   ApiBearerAuth,
   ApiConsumes,
   ApiExtraModels,
-  ApiOkResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
