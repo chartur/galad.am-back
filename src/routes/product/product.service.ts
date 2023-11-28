@@ -70,15 +70,9 @@ export class ProductService {
     };
   }
 
-  public async getProductById(id: number): Promise<ProductEntity> {
+  public getProductById(id: number): Promise<ProductEntity> {
     this.logger.log("[Product] get by id", {
       id,
-    });
-
-    await new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(null);
-      }, 2000);
     });
 
     return this.productEntityRepository.findOneOrFail({
