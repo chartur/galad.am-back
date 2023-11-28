@@ -95,6 +95,21 @@ export class ProductController {
     return this.productService.getProductById(id);
   }
 
+  @Get("related/:id")
+  @ApiOperation({
+    summary: "Get products related to current product",
+    description:
+      "GET request should select products related to the specific product by ID",
+  })
+  @ApiResponse({
+    status: 200,
+    type: [ProductEntity],
+    description: "The records successfully found",
+  })
+  public getRelatedProducts(@Param("id") id: number): Promise<ProductEntity[]> {
+    return this.productService.getRelatedProducts(id);
+  }
+
   @Post("/:id?/content")
   @ApiBearerAuth()
   @ApiOperation({

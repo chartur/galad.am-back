@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ProductEntity } from "../../entities/product.entity";
-import { ILike, Not, Repository } from "typeorm";
+import { ILike, In, Not, Repository } from "typeorm";
 import { SaveProductContentDto } from "../../core/dto/product/save-product-content.dto";
 import { ProductStatus } from "../../models/enums/product-status";
 import { DataTablePayloadDto } from "../../core/dto/data-table-payload.dto";
@@ -70,9 +70,15 @@ export class ProductService {
     };
   }
 
-  public getProductById(id: number): Promise<ProductEntity> {
+  public async getProductById(id: number): Promise<ProductEntity> {
     this.logger.log("[Product] get by id", {
       id,
+    });
+
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(null);
+      }, 2000);
     });
 
     return this.productEntityRepository.findOneOrFail({
@@ -80,6 +86,38 @@ export class ProductService {
         id,
       },
       relations: ["category", "assets", "tags"],
+    });
+  }
+
+  public async getRelatedProducts(id: number): Promise<ProductEntity[]> {
+    this.logger.log("[Product] get related products", {
+      id,
+    });
+
+    const product = await this.productEntityRepository.findOneOrFail({
+      where: {
+        id,
+      },
+      relations: ["tags"],
+    });
+
+    console.log(product.tags);
+    return this.productEntityRepository.find({
+      where: {
+        id: Not(product.id),
+        status: ProductStatus.Active,
+        tags: {
+          id: In(product.tags.map((tag) => tag.id)),
+        },
+        category: {
+          status: CategoryStatus.Active,
+        },
+      },
+      order: {
+        id: "DESC",
+      },
+      take: 8,
+      relations: ["tags", "assets", "category"],
     });
   }
 
@@ -298,7 +336,7 @@ export class ProductService {
       .where("categories.status = :status", {
         status: CategoryStatus.Active,
       })
-      .where(
+      .andWhere(
         "products.status = :status AND products.is_new_arrival = :is_new_arrival",
         {
           status: ProductStatus.Active,

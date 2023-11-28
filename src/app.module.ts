@@ -27,6 +27,7 @@ import { TagModule } from "./routes/tag/tag.module";
       synchronize: true,
       autoLoadEntities: true,
       entities: ENTITIES,
+      // logging: true,
     }),
     MulterModule.register({
       dest: "./upload",
