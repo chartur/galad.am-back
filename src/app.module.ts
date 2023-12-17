@@ -4,13 +4,14 @@ import { ConfigModule } from "@nestjs/config";
 import { ENTITIES } from "./entities";
 import { BannerModule } from "./routes/banner/banner.module";
 import { MulterModule } from "@nestjs/platform-express";
-import { AuthModule } from "./routes/admin/auth/auth.module";
+import { AuthModule as AdminAuthModule } from "./routes/admin/auth/auth.module";
 import { TranslatorModule } from "./routes/translator/translator.module";
 import { ProductModule } from "./routes/product/product.module";
 import { CategoryModule } from "./routes/category/category.module";
 import { AppController } from "./app.controller";
 import { SpecialSectionModule } from "./routes/special-section/special-section.module";
 import { TagModule } from "./routes/tag/tag.module";
+import { AuthModule as UserAuthModule } from "./routes/user/auth/auth.module";
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { TagModule } from "./routes/tag/tag.module";
       dest: "./upload",
     }),
     BannerModule,
-    AuthModule,
+    AdminAuthModule,
+    UserAuthModule,
     TranslatorModule,
     ProductModule,
     CategoryModule,

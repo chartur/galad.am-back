@@ -13,15 +13,16 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 import { AdminSignInDto } from "../../../core/dto/admin/admin-sign-in.dto";
-import { AuthService } from "./auth.service";
 import { AdminAuthResponseDto } from "../../../core/dto/admin/admin-auth-response.dto";
 import { AdminRegisterDto } from "../../../core/dto/admin/admin-register.dto";
 import { AdminGuard } from "../../../shared/guards/admin.guard";
+import { AuthUserService } from "../../../shared/services/auth-user.service";
+import { AuthRole } from "../../../core/constants/auth-role.enum";
 
 @ApiTags("Admin Auth")
 @Controller("auth/admin")
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authUserService: AuthUserService) {}
 
   @Post("sign-in")
   @ApiOperation({
@@ -35,7 +36,10 @@ export class AuthController {
     type: AdminAuthResponseDto,
   })
   public signIn(@Body() body: AdminSignInDto): Promise<AdminAuthResponseDto> {
-    return this.authService.signIn(body);
+    return this.authUserService.signIn<AdminAuthResponseDto>(
+      body,
+      AuthRole.admin,
+    );
   }
 
   @Post("sign-up")
@@ -52,7 +56,10 @@ export class AuthController {
   public register(
     @Body() body: AdminRegisterDto,
   ): Promise<AdminAuthResponseDto> {
-    return this.authService.register(body);
+    return this.authUserService.register<AdminAuthResponseDto>(
+      body,
+      AuthRole.admin,
+    );
   }
 
   @Get("user")
@@ -69,6 +76,9 @@ export class AuthController {
   })
   @UseGuards(AdminGuard)
   public getAuthAdmin(@Headers() headers): AdminAuthResponseDto {
-    return this.authService.getAuthAdmin(headers["authorization"]);
+    return this.authUserService.getAuthorizedUser<AdminAuthResponseDto>(
+      headers["authorization"],
+      AuthRole.admin,
+    );
   }
 }

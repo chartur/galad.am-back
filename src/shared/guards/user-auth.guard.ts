@@ -2,10 +2,10 @@ import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { Observable } from "rxjs";
 import { Request } from "express";
 import { JwtService } from "@nestjs/jwt";
-import { AUTH_SECRET, AdminEntity } from "../../entities/admin.entity";
+import {AUTH_SECRET, UserEntity} from "../../entities/user.entity";
 
 @Injectable()
-export class AdminGuard implements CanActivate {
+export class UserAuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
   canActivate(
@@ -18,15 +18,15 @@ export class AdminGuard implements CanActivate {
       return false;
     }
 
-    const admin = this.jwtService.verify<AdminEntity>(token, {
+    const user = this.jwtService.verify<UserEntity>(token, {
       secret: AUTH_SECRET,
     });
 
-    if (!admin) {
+    if (!user) {
       return false;
     }
 
-    request["admin"] = admin;
+    request["user"] = user;
     return true;
   }
 }

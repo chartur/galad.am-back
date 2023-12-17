@@ -5,8 +5,10 @@ import { BannerEntity } from "./banner.entity";
 import { AdminEntity } from "./admin.entity";
 import { SpecialSectionEntity } from "./special-section.entity";
 import { TagEntity } from "./tag.entity";
+import { UserEntity } from "./user.entity";
 
 export const ENTITIES = [
+  UserEntity,
   ProductEntity,
   CategoryEntity,
   ProductAssetEntity,

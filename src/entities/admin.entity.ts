@@ -8,11 +8,13 @@ import {
 } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 import * as bcrypt from "bcrypt";
+import { AuthUser } from "../core/interfaces/auth-user";
 
 export const ADMIN_USER_PASSWORD_SALT = 10;
+export const AUTH_SECRET = "ADMIN_AUTH_SECRET_KEY";
 
 @Entity({ name: "admins" })
-export class AdminEntity {
+export class AdminEntity implements AuthUser {
   @ApiProperty({
     example: 1,
     description: "The unique ID of admin",
@@ -25,7 +27,7 @@ export class AdminEntity {
     description: "The full name of admin user",
   })
   @Column()
-  name: string;
+  fullName: string;
 
   @ApiProperty({
     example: "john.alex@yopmail.com",
