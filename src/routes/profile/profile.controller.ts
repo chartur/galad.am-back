@@ -27,7 +27,7 @@ import { ResponseUser } from "../../core/interfaces/response-user";
 import { AuthorizationResponse } from "../../core/interfaces/authorization-response";
 
 @Controller("profile")
-@ApiTags("Banner")
+@ApiTags("Profile")
 @UseGuards(UserAuthGuard)
 export class ProfileController {
   constructor(private profileService: ProfileService) {}
