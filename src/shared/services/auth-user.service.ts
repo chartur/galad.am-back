@@ -1,16 +1,26 @@
 import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { AUTH_SECRET as AdminAuthSecret, AdminEntity } from "../../entities/admin.entity";
-import { AUTH_SECRET as UserAuthSecret, UserEntity } from "../../entities/user.entity";
+import {
+  AUTH_SECRET as AdminAuthSecret,
+  AdminEntity,
+} from "../../entities/admin.entity";
+import {
+  AUTH_SECRET as UserAuthSecret,
+  UserEntity,
+} from "../../entities/user.entity";
 import { AuthRole } from "../../core/constants/auth-role.enum";
 import { AuthUserRegisterDto } from "../../core/dto/auth/auth-user-register.dto";
 import { JwtService } from "@nestjs/jwt";
-import { AdminAuthResponseDto } from "../../core/dto/admin/admin-auth-response.dto";
 import { AuthUserLoginDto } from "../../core/dto/auth/auth-user-login.dto";
 import { promisify } from "util";
 import { AuthUser } from "../../core/interfaces/auth-user";
 import * as bcrypt from "bcrypt";
+import {
+  ResponseAdmin,
+  ResponseUser,
+} from "../../core/interfaces/response-user";
+import { AuthorizationResponse } from "../../core/interfaces/authorization-response";
 const bcryptComparePromise = promisify(bcrypt.compare);
 
 @Injectable()
@@ -38,15 +48,17 @@ export class AuthUserService {
     }) as Promise<T>;
   }
 
-  public create<T>(body: AuthUserRegisterDto, role: AuthRole): Promise<T> {
+  public create(body: AuthUserRegisterDto, role: AuthRole): Promise<AuthUser> {
     this.logger(role).log(`[${role}] create`, body);
     const repo = this.repository(role);
-    console.log(repo);
-    const authUser = repo.create(body) as T;
+    const authUser = repo.create(body);
     return repo.save(authUser);
   }
 
-  public async signIn<T>(body: AuthUserLoginDto, role: AuthRole): Promise<T> {
+  public async signIn(
+    body: AuthUserLoginDto,
+    role: AuthRole,
+  ): Promise<AuthorizationResponse> {
     this.logger(role).log(`[${role}] sign in`, body);
     const authUser = await this.findByEmailOrFail<AuthUser>(body.email, role);
     const verified = await bcryptComparePromise(
@@ -60,30 +72,29 @@ export class AuthUserService {
 
     const { password, ...payload } = authUser;
 
-    return {
-      token: this.jwtService.sign(payload, {
-        secret: role === AuthRole.user ? UserAuthSecret : AdminAuthSecret,
-      }),
-      user: payload,
-    } as T;
+    return this.getAuthorizationData(
+      payload as ResponseUser | ResponseAdmin,
+      role,
+    );
   }
 
-  public async register<T>(
+  public async register(
     body: AuthUserRegisterDto,
     role: AuthRole,
-  ): Promise<T> {
+  ): Promise<AuthorizationResponse> {
     this.logger(role).log(`[${role}] register`, body);
-    const authUser = await this.create<AuthUser>(body, role);
+    const authUser = await this.create(body, role);
     const { password, ...payload } = authUser;
-    return {
-      token: this.jwtService.sign(payload, {
-        secret: role === AuthRole.user ? UserAuthSecret : AdminAuthSecret,
-      }),
-      user: payload,
-    } as T;
+    return this.getAuthorizationData(
+      payload as ResponseUser | ResponseAdmin,
+      role,
+    );
   }
 
-  public getAuthorizedUser<T>(token: string, role: AuthRole): T {
+  public getAuthorizedUser(
+    token: string,
+    role: AuthRole,
+  ): AuthorizationResponse {
     const parsedToken = token.replace("Bearer ", "");
     const verified = this.jwtService.verify(parsedToken, {
       secret: role === AuthRole.user ? UserAuthSecret : AdminAuthSecret,
@@ -91,7 +102,19 @@ export class AuthUserService {
     return {
       user: verified,
       token: parsedToken,
-    } as T;
+    };
+  }
+
+  public getAuthorizationData(
+    user: ResponseUser | ResponseAdmin,
+    role: AuthRole,
+  ): AuthorizationResponse {
+    return {
+      token: this.jwtService.sign(user, {
+        secret: role === AuthRole.user ? UserAuthSecret : AdminAuthSecret,
+      }),
+      user: user,
+    };
   }
 
   private repository(role: AuthRole): Repository<AdminEntity | UserEntity> {

@@ -12,6 +12,7 @@ import { AppController } from "./app.controller";
 import { SpecialSectionModule } from "./routes/special-section/special-section.module";
 import { TagModule } from "./routes/tag/tag.module";
 import { AuthModule as UserAuthModule } from "./routes/user/auth/auth.module";
+import { ProfileModule } from "./routes/profile/profile.module";
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { AuthModule as UserAuthModule } from "./routes/user/auth/auth.module";
     CategoryModule,
     SpecialSectionModule,
     TagModule,
+    ProfileModule,
   ],
   providers: [],
   controllers: [AppController],

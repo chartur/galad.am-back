@@ -18,6 +18,7 @@ import { AdminRegisterDto } from "../../../core/dto/admin/admin-register.dto";
 import { AdminGuard } from "../../../shared/guards/admin.guard";
 import { AuthUserService } from "../../../shared/services/auth-user.service";
 import { AuthRole } from "../../../core/constants/auth-role.enum";
+import { AuthorizationResponse } from "../../../core/interfaces/authorization-response";
 
 @ApiTags("Admin Auth")
 @Controller("auth/admin")
@@ -35,11 +36,8 @@ export class AuthController {
     description: "The record found",
     type: AdminAuthResponseDto,
   })
-  public signIn(@Body() body: AdminSignInDto): Promise<AdminAuthResponseDto> {
-    return this.authUserService.signIn<AdminAuthResponseDto>(
-      body,
-      AuthRole.admin,
-    );
+  public signIn(@Body() body: AdminSignInDto): Promise<AuthorizationResponse> {
+    return this.authUserService.signIn(body, AuthRole.admin);
   }
 
   @Post("sign-up")
@@ -56,10 +54,7 @@ export class AuthController {
   public register(
     @Body() body: AdminRegisterDto,
   ): Promise<AdminAuthResponseDto> {
-    return this.authUserService.register<AdminAuthResponseDto>(
-      body,
-      AuthRole.admin,
-    );
+    return this.authUserService.register(body, AuthRole.admin);
   }
 
   @Get("user")
@@ -75,8 +70,8 @@ export class AuthController {
     type: AdminAuthResponseDto,
   })
   @UseGuards(AdminGuard)
-  public getAuthAdmin(@Headers() headers): AdminAuthResponseDto {
-    return this.authUserService.getAuthorizedUser<AdminAuthResponseDto>(
+  public getAuthAdmin(@Headers() headers): AuthorizationResponse {
+    return this.authUserService.getAuthorizedUser(
       headers["authorization"],
       AuthRole.admin,
     );

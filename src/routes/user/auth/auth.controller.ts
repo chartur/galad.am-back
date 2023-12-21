@@ -19,6 +19,7 @@ import { UserAuthResponseDto } from "../../../core/dto/user/user-auth-response.d
 import { UserSignInDto } from "../../../core/dto/user/user-sign-in.dto";
 import { UserRegisterDto } from "../../../core/dto/user/user-register.dto";
 import { UserAuthGuard } from "../../../shared/guards/user-auth.guard";
+import { AuthorizationResponse } from "../../../core/interfaces/authorization-response";
 
 @ApiTags("User Auth")
 @Controller("auth/user")
@@ -36,11 +37,8 @@ export class AuthController {
     description: "The record found",
     type: UserAuthResponseDto,
   })
-  public signIn(@Body() body: UserSignInDto): Promise<UserAuthResponseDto> {
-    return this.authUserService.signIn<UserAuthResponseDto>(
-      body,
-      AuthRole.user,
-    );
+  public signIn(@Body() body: UserSignInDto): Promise<AuthorizationResponse> {
+    return this.authUserService.signIn(body, AuthRole.user);
   }
 
   @Post("sign-up")
@@ -57,10 +55,7 @@ export class AuthController {
   public register(
     @Body() body: UserRegisterDto,
   ): Promise<AdminAuthResponseDto> {
-    return this.authUserService.register<UserAuthResponseDto>(
-      body,
-      AuthRole.user,
-    );
+    return this.authUserService.register(body, AuthRole.user);
   }
 
   @Get("user")
@@ -76,8 +71,8 @@ export class AuthController {
     type: UserAuthResponseDto,
   })
   @UseGuards(UserAuthGuard)
-  public getAuthAdmin(@Headers() headers): UserAuthResponseDto {
-    return this.authUserService.getAuthorizedUser<UserAuthResponseDto>(
+  public getAuthAdmin(@Headers() headers): AuthorizationResponse {
+    return this.authUserService.getAuthorizedUser(
       headers["authorization"],
       AuthRole.user,
     );

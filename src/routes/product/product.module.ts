@@ -17,7 +17,7 @@ import { TagEntity } from "../../entities/tag.entity";
       ProductEntity,
       ProductAssetEntity,
       CategoryEntity,
-      TagEntity
+      TagEntity,
     ]),
     GuardsModule,
   ],

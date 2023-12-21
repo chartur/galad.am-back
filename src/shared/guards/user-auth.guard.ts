@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { Observable } from "rxjs";
 import { Request } from "express";
 import { JwtService } from "@nestjs/jwt";
-import {AUTH_SECRET, UserEntity} from "../../entities/user.entity";
+import { AUTH_SECRET, UserEntity } from "../../entities/user.entity";
 
 @Injectable()
 export class UserAuthGuard implements CanActivate {
@@ -26,7 +26,9 @@ export class UserAuthGuard implements CanActivate {
       return false;
     }
 
-    request["user"] = user;
+    const { exp, iat, ...payload } = user as any;
+
+    request["user"] = payload;
     return true;
   }
 }

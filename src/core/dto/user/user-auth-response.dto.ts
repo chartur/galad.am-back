@@ -1,7 +1,8 @@
 import { ApiResponseProperty } from "@nestjs/swagger";
-import { UserEntity } from "../../../entities/user.entity";
+import { ResponseUser } from "../../interfaces/response-user";
+import { AuthorizationResponse } from "../../interfaces/authorization-response";
 
-export class UserAuthResponseDto {
+export class UserAuthResponseDto implements AuthorizationResponse {
   @ApiResponseProperty({
     example: "ACCESS_TOKEN",
   })
@@ -18,5 +19,5 @@ export class UserAuthResponseDto {
       updated_at: "2011-10-05T14:48:00.000Z",
     },
   })
-  user: Omit<UserEntity, "password" | "hashPassword">;
+  user: ResponseUser;
 }
