@@ -10,7 +10,7 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import {
-  ApiBearerAuth,
+  ApiBearerAuth, ApiConsumes,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -34,6 +34,7 @@ export class ProfileController {
 
   @Patch("/personal-settings")
   @ApiBearerAuth()
+  @ApiConsumes("multipart/form-data")
   @ApiOperation({
     summary: "Update user personal info",
     description: "PATCH request should update user personal info data",
