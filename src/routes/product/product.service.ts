@@ -95,7 +95,6 @@ export class ProductService {
       relations: ["tags"],
     });
 
-    console.log(product.tags);
     return this.productEntityRepository.find({
       where: {
         id: Not(product.id),
