@@ -19,7 +19,7 @@ import { UserAuthResponseDto } from "../../../core/dto/user/user-auth-response.d
 import { UserSignInDto } from "../../../core/dto/user/user-sign-in.dto";
 import { UserRegisterDto } from "../../../core/dto/user/user-register.dto";
 import { UserAuthGuard } from "../../../shared/guards/user-auth.guard";
-import { AuthorizationResponse } from "../../../core/interfaces/authorization-response";
+import { AuthorizationResponse } from "../../../core/dto/auth/authorization-response";
 
 @ApiTags("User Auth")
 @Controller("auth/user")

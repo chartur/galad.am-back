@@ -20,7 +20,7 @@ import {
   ResponseAdmin,
   ResponseUser,
 } from "../../core/interfaces/response-user";
-import { AuthorizationResponse } from "../../core/interfaces/authorization-response";
+import { AuthorizationResponse } from "../../core/dto/auth/authorization-response";
 const bcryptComparePromise = promisify(bcrypt.compare);
 
 @Injectable()

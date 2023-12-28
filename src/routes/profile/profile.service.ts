@@ -6,8 +6,9 @@ import { Repository } from "typeorm";
 import { UserEntity } from "../../entities/user.entity";
 import { AuthUserService } from "../../shared/services/auth-user.service";
 import { AuthRole } from "../../core/constants/auth-role.enum";
-import { AuthorizationResponse } from "../../core/interfaces/authorization-response";
+import { AuthorizationResponse } from "../../core/dto/auth/authorization-response";
 import * as fs from "fs";
+import { UpdatePasswordSettingsRequestDto } from "../../core/dto/profile/update-password-settings.request.dto";
 
 @Injectable()
 export class ProfileService {
@@ -35,5 +36,21 @@ export class ProfileService {
       });
     }
     return this.authUserService.getAuthorizationData(user, AuthRole.user);
+  }
+
+  public async updatePasswordSettings(
+    authUser: ResponseUser,
+    body: UpdatePasswordSettingsRequestDto,
+  ): Promise<AuthorizationResponse> {
+    let user = await this.userEntityRepository.findOneOrFail({
+      where: {
+        id: authUser.id,
+      },
+    });
+    user.password = body.password;
+    user.hashPassword();
+    user = await this.userEntityRepository.save(user);
+    const { password, ...payload } = user;
+    return this.authUserService.getAuthorizationData(payload, AuthRole.user);
   }
 }

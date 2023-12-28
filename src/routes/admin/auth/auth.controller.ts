@@ -18,7 +18,7 @@ import { AdminRegisterDto } from "../../../core/dto/admin/admin-register.dto";
 import { AdminGuard } from "../../../shared/guards/admin.guard";
 import { AuthUserService } from "../../../shared/services/auth-user.service";
 import { AuthRole } from "../../../core/constants/auth-role.enum";
-import { AuthorizationResponse } from "../../../core/interfaces/authorization-response";
+import { AuthorizationResponse } from "../../../core/dto/auth/authorization-response";
 
 @ApiTags("Admin Auth")
 @Controller("auth/admin")

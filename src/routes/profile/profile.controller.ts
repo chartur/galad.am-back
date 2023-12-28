@@ -10,7 +10,8 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import {
-  ApiBearerAuth, ApiConsumes,
+  ApiBearerAuth,
+  ApiConsumes,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -24,7 +25,8 @@ import { DeleteUploadedFileOnErrorFilter } from "../../core/filters/delete-uploa
 import { UpdatePersonalSettingsRequestDto } from "../../core/dto/profile/update-personal-settings.request.dto";
 import { AuthUser } from "../../core/decorators/auth-user.decorator";
 import { ResponseUser } from "../../core/interfaces/response-user";
-import { AuthorizationResponse } from "../../core/interfaces/authorization-response";
+import { AuthorizationResponse } from "../../core/dto/auth/authorization-response";
+import { UpdatePasswordSettingsRequestDto } from "../../core/dto/profile/update-password-settings.request.dto";
 
 @Controller("profile")
 @ApiTags("Profile")
@@ -41,7 +43,7 @@ export class ProfileController {
   })
   @ApiResponse({
     status: 200,
-    type: UserEntity,
+    type: AuthorizationResponse,
     description: "The record successfully updated",
   })
   @UseInterceptors(
@@ -62,5 +64,23 @@ export class ProfileController {
     file: Express.Multer.File,
   ): Promise<AuthorizationResponse> {
     return this.profileService.updatePersonalSettings(authUser, body, file);
+  }
+
+  @Patch("/password-settings")
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: "Update user password credentials",
+    description: "PATCH request should update user password",
+  })
+  @ApiResponse({
+    status: 200,
+    type: AuthorizationResponse,
+    description: "The record successfully updated",
+  })
+  public updatePasswordSettings(
+    @AuthUser() authUser: ResponseUser,
+    @Body() body: UpdatePasswordSettingsRequestDto,
+  ): Promise<AuthorizationResponse> {
+    return this.profileService.updatePasswordSettings(authUser, body);
   }
 }
