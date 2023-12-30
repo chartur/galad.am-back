@@ -9,7 +9,12 @@ import {
   Query,
   UseGuards,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 import { ApiPaginatedResponse } from "../../core/decorators/api-paginated-response";
 import { AdminGuard } from "../../shared/guards/admin.guard";
 import { DataTablePayloadDto } from "../../core/dto/data-table-payload.dto";
@@ -34,7 +39,6 @@ export class TagController {
     model: TagEntity,
     total: 3,
   })
-  @UseGuards(AdminGuard)
   public getTags(
     @Query() query: DataTablePayloadDto,
   ): Promise<PaginationResponseDto<TagEntity>> {

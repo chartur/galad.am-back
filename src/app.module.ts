@@ -13,6 +13,7 @@ import { SpecialSectionModule } from "./routes/special-section/special-section.m
 import { TagModule } from "./routes/tag/tag.module";
 import { AuthModule as UserAuthModule } from "./routes/user/auth/auth.module";
 import { ProfileModule } from "./routes/profile/profile.module";
+import { FilterModule } from './routes/filter/filter.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { ProfileModule } from "./routes/profile/profile.module";
     SpecialSectionModule,
     TagModule,
     ProfileModule,
+    FilterModule,
   ],
   providers: [],
   controllers: [AppController],

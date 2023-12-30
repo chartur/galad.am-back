@@ -91,12 +91,7 @@ export class ProductController {
     type: ProductEntity,
     description: "The record successfully found",
   })
-  public async getProductById(@Param("id") id: number): Promise<ProductEntity> {
-    await new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(1);
-      }, 2000);
-    });
+  public getProductById(@Param("id") id: number): Promise<ProductEntity> {
     return this.productService.getProductById(id);
   }
 

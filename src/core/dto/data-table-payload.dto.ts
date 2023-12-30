@@ -1,5 +1,5 @@
 import { DataTableOrderType } from "../../models/enums/data-table-order-type";
-import { IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
+import {IsEnum, IsNumber, IsObject, IsOptional, IsString} from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
 
@@ -48,4 +48,12 @@ export class DataTablePayloadDto {
   @IsOptional()
   @IsString()
   filter?: string;
+
+  @ApiProperty({
+    required: false,
+    description: "Additional properties for filter",
+  })
+  @IsOptional()
+  @IsObject()
+  props: { [key: string]: string };
 }

@@ -25,7 +25,7 @@ export class TagService {
       query,
     });
 
-    const whereCondition: any = {};
+    const whereCondition: any = query.props || {};
 
     const findOptions = {
       skip: (query.page - 1) * query.limit,
