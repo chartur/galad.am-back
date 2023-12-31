@@ -1,4 +1,4 @@
-import { IsArray, IsNumber, IsOptional, IsString, Min } from "class-validator";
+import {IsArray, IsBoolean, IsNumber, IsOptional, IsString, Min} from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class FilterRequestDto {
@@ -28,6 +28,14 @@ export class FilterRequestDto {
   @IsArray()
   @IsOptional()
   tags?: number[];
+
+  @ApiProperty({
+    required: false,
+    description: "Discount state",
+  })
+  @IsOptional()
+  @IsBoolean()
+  sale?: boolean;
 
   @ApiProperty({
     required: false,

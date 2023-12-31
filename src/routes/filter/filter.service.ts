@@ -30,6 +30,10 @@ export class FilterService {
         categoryStatus: CategoryStatus.Active,
       });
 
+    if (body.sale) {
+      query = query.andWhere("products.new_price > 0");
+    }
+
     if (body?.category?.length > 0) {
       query = query.andWhere("category.id IN (:...categoryId)", {
         categoryId: body.category,
