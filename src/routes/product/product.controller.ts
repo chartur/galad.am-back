@@ -37,6 +37,7 @@ import { DeleteUploadedFileOnErrorFilter } from "../../core/filters/delete-uploa
 import { SaveProductAssetsDto } from "../../core/dto/product/save-product-assets.dto";
 import { Uploader } from "../../utils/uploader";
 import { CategoryEntity } from "../../entities/category.entity";
+import { GetProductsByIdsDto } from "../../core/dto/product/get-products-by-ids.dto";
 
 @ApiTags("Product")
 @ApiExtraModels(PaginationResponseDto)
@@ -64,6 +65,22 @@ export class ProductController {
     @Query() query: DataTablePayloadDto,
   ): Promise<PaginationResponseDto<ProductEntity>> {
     return this.productService.getProductsByStatus(status, query);
+  }
+
+  @Post("/by-ids")
+  @ApiOperation({
+    summary: "Get products by ids",
+    description: "GET request should return products by ids",
+  })
+  @ApiResponse({
+    status: 200,
+    type: [ProductEntity],
+    description: "The records successfully found",
+  })
+  public getProductsByIds(
+    @Body() body: GetProductsByIdsDto,
+  ): Promise<ProductEntity[]> {
+    return this.productService.getByIds(body);
   }
 
   @Get("/new-arrivals")

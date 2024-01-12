@@ -14,6 +14,7 @@ import { CategoryEntity } from "../../entities/category.entity";
 import { ProductRepository } from "../../repositories/product.repository";
 import { CategoryStatus } from "../../models/enums/category-status";
 import * as _ from "lodash";
+import { GetProductsByIdsDto } from "../../core/dto/product/get-products-by-ids.dto";
 
 @Injectable()
 export class ProductService {
@@ -68,6 +69,16 @@ export class ProductService {
       results: data,
       total: count,
     };
+  }
+
+  public getByIds(body: GetProductsByIdsDto): Promise<ProductEntity[]> {
+    return this.productEntityRepository.find({
+      where: {
+        id: In(body.products),
+        status: ProductStatus.Active,
+      },
+      relations: ["category", "assets"],
+    });
   }
 
   public getProductById(id: number): Promise<ProductEntity> {
