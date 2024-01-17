@@ -17,7 +17,6 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 import { UserAuthGuard } from "../../shared/guards/user-auth.guard";
-import { UserEntity } from "../../entities/user.entity";
 import { ProfileService } from "./profile.service";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Uploader } from "../../utils/uploader";

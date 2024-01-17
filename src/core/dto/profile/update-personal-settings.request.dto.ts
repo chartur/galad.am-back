@@ -8,6 +8,11 @@ export class UpdatePersonalSettingsRequestDto {
   @IsEmail()
   email: string;
 
+  @ApiProperty({ required: true, description: "User phone number" })
+  @IsString()
+  @IsNotEmpty()
+  phone: string;
+
   @ApiProperty({ required: true, description: "User full name" })
   @IsString()
   @IsNotEmpty()

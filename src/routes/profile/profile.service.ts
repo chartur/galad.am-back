@@ -26,6 +26,7 @@ export class ProfileService {
       ...authUser,
       email: body.email,
       fullName: body.fullName,
+      phone: body.phone,
       image: file?.path || authUser.image,
     });
     if (file?.path && authUser.image && authUser.image !== file.path) {

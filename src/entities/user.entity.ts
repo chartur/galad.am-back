@@ -37,6 +37,13 @@ export class UserEntity implements AuthUser {
   email: string;
 
   @ApiProperty({
+    example: "+37477777777",
+    description: "The phone number of user",
+  })
+  @Column({ unique: true, nullable: true })
+  phone: string;
+
+  @ApiProperty({
     example: "/public/user/2/avatar.jpeg",
     description: "The profile image path of user",
   })

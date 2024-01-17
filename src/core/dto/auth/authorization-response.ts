@@ -11,6 +11,7 @@ export class AuthorizationResponse {
     example: {
       name: "John Alex",
       email: "john.alex@yopmail.com",
+      phone: "+37477777777",
       created_at: "2011-10-05T14:48:00.000Z",
       updated_at: "2011-10-05T14:48:00.000Z",
     },
