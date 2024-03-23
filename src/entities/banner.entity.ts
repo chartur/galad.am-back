@@ -9,6 +9,7 @@ import {
 import { ApiProperty } from "@nestjs/swagger";
 import * as fs from "fs";
 import { BannerPosition } from "../models/enums/banner-position";
+import { LinkOpenHandler } from "../models/enums/link-open-handler";
 
 @Entity({ name: "banners" })
 export class BannerEntity {
@@ -60,11 +61,50 @@ export class BannerEntity {
   ru_description: string;
 
   @ApiProperty({
+    example: "Տեսնել ավելին",
+    description: "The Armenian text on the button",
+  })
+  @Column({ default: "Տեսնել ավելին" })
+  am_button_text: string;
+
+  @ApiProperty({
+    example: "See more",
+    description: "The English text on the button",
+  })
+  @Column({ default: "See more" })
+  en_button_text: string;
+
+  @ApiProperty({
+    example: "Узнать больше",
+    description: "The Russian text on the button",
+  })
+  @Column({ default: "Узнать больше" })
+  ru_button_text: string;
+
+  @ApiProperty({
     example: "public/banners/eb7569a5a0f2c2efc1eee74b.jpeg",
     description: "The link of banner's image",
   })
   @Column()
   link: string;
+
+  @ApiProperty({
+    example: "/filter?sale=true",
+    description: "The redirection url of specific list of products page",
+  })
+  @Column({ nullable: true })
+  button_link: string;
+
+  @ApiProperty({
+    example: LinkOpenHandler.Default,
+    description: "Open link of banner with same or different browser tabs",
+  })
+  @Column({
+    type: "enum",
+    enum: LinkOpenHandler,
+    default: LinkOpenHandler.Default,
+  })
+  url_open_handle: LinkOpenHandler;
 
   @ApiProperty({
     example: true,

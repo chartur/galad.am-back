@@ -1,12 +1,14 @@
 import { HttpException, HttpStatus, Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { OrderEntity } from "../../entities/order.entity";
-import { DataSource, In, Repository } from "typeorm";
+import { Brackets, DataSource, In, Repository } from "typeorm";
 import { OrderProductEntity } from "../../entities/order-product.entity";
 import { CreateOrderDto } from "../../core/dto/order/create-order.dto";
 import { ProductEntity } from "../../entities/product.entity";
 import { ResponseUser } from "../../core/interfaces/response-user";
-import {UserEntity} from "../../entities/user.entity";
+import { UserEntity } from "../../entities/user.entity";
+import { PaginationResponseDto } from "../../core/dto/pagination-response.dto";
+import { OrderFilterDto } from "../../core/dto/order/order-filter.dto";
 
 @Injectable()
 export class OrderService {
@@ -67,17 +69,15 @@ export class OrderService {
       const orderProduct = this.orderProductEntityRepository.create();
       orderProduct.product = product;
       orderProduct.quantity = quantity;
-      orderProduct.price = (product.new_price || product.price).toFixed(2);
-      orderProduct.totalPrice = (
-        (product.new_price || product.price) * quantity
-      ).toFixed(2);
+      orderProduct.price = product.new_price || product.price;
+      orderProduct.totalPrice = (product.new_price || product.price) * quantity;
       orderProducts.push(orderProduct);
     });
     const discount = originalPrice - totalPrice;
     order.totalQuantity = totalQuantity;
-    order.totalPrice = totalPrice.toFixed(2);
-    order.originalPrice = originalPrice.toFixed(2);
-    order.discounts = discount.toFixed(2);
+    order.totalPrice = totalPrice;
+    order.originalPrice = originalPrice;
+    order.discounts = discount;
     order.orderProducts = orderProducts;
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -95,5 +95,109 @@ export class OrderService {
     } finally {
       await queryRunner.release();
     }
+  }
+
+  public async getAll(
+    body: OrderFilterDto,
+  ): Promise<PaginationResponseDto<OrderEntity>> {
+    this.logger.log("[Order] get all by filter", {
+      body,
+    });
+
+    let query = this.orderEntityRepository
+      .createQueryBuilder("orders")
+      .leftJoinAndSelect("orders.orderProducts", "orderProducts")
+      .leftJoinAndSelect("orderProducts.product", "products")
+      .leftJoinAndSelect("orders.user", "user")
+      .skip((body.page - 1) * body.limit)
+      .select(["orders.id"]);
+
+    if (body.priceLow && body.priceHigh) {
+      query = query.andWhere(
+        "orders.totalPrice BETWEEN :priceLow and :priceHigh",
+        {
+          priceLow: body.priceLow,
+          priceHigh: body.priceHigh,
+        },
+      );
+    } else if (body.priceLow) {
+      query = query.andWhere("orders.totalPrice >= :priceLow", {
+        priceLow: body.priceLow,
+      });
+    } else if (body.priceHigh) {
+      query = query.andWhere("orders.totalPrice <= :priceHigh", {
+        priceHigh: body.priceHigh,
+      });
+    }
+
+    if (body.statuses?.length > 0) {
+      query = query.andWhere("orders.status IN (:...statuses)", {
+        statuses: body.statuses,
+      });
+    }
+
+    if (body.products?.length > 0) {
+      query = query.andWhere("products.id IN (:...productIds)", {
+        productIds: body.products,
+      });
+    }
+    const filter = body.filter.trim();
+    if (filter) {
+      query = query.andWhere(
+        new Brackets((q) => {
+          q.orWhere("orders.email ILIKE :q", {
+            q: `%${filter}%`,
+          })
+            .orWhere("orders.phone ILIKE :q", {
+              q: `%${filter}%`,
+            })
+            .orWhere("user.fullName ILIKE :q", {
+              q: `%${filter}%`,
+            });
+        }),
+      );
+    }
+
+    if (body.limit && body.limit > 0) {
+      query = query.take(body.limit);
+    }
+
+    if (body.sortBy) {
+      query = query.orderBy(body.sortBy, body.order);
+    }
+
+    const [ids, count] = await query.getManyAndCount();
+
+    const result = await this.orderEntityRepository.find({
+      where: {
+        id: In(ids.map((entity) => entity.id)),
+      },
+      relations: ["orderProducts.product", "user"],
+    });
+
+    return {
+      total: count,
+      results: result,
+    };
+  }
+
+  public getOne(orderId: string): Promise<OrderEntity> {
+    this.logger.log("[Order] get one by ID", {
+      orderId,
+    });
+
+    return this.orderEntityRepository.findOneOrFail({
+      where: {
+        id: orderId,
+      },
+      relations: {
+        orderProducts: {
+          product: {
+            category: true,
+          },
+        },
+        user: true,
+      },
+    });
   }
 }

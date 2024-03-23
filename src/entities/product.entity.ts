@@ -8,6 +8,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  VirtualColumn,
 } from "typeorm";
 import { CategoryEntity } from "./category.entity";
 import { ProductAssetEntity } from "./product-asset.entity";
@@ -104,14 +105,20 @@ export class ProductEntity {
     example: 8500,
     description: "The original price of product",
   })
-  @Column({ nullable: true, default: 0 })
+  @Column({
+    nullable: true,
+    default: 0,
+    type: "numeric",
+    precision: 20,
+    scale: 2,
+  })
   price: number;
 
   @ApiProperty({
     example: 6700,
     description: "The new price of product after discount",
   })
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: "numeric", precision: 20, scale: 2 })
   new_price: number;
 
   @ApiProperty({
@@ -148,4 +155,10 @@ export class ProductEntity {
   })
   @UpdateDateColumn()
   updated_at: Date;
+
+  @VirtualColumn({
+    query: (alias) =>
+      `SELECT "link" FROM "product_assets" WHERE "productId" = ${alias}.id and type='photo' and is_main=true`,
+  })
+  mainAsset: string;
 }

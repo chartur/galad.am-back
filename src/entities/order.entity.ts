@@ -1,8 +1,10 @@
 import {
+  AfterInsert,
   BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
+  Generated,
   JoinColumn,
   ManyToOne,
   OneToMany,
@@ -12,8 +14,8 @@ import {
 import { ApiProperty } from "@nestjs/swagger";
 import { UserEntity } from "./user.entity";
 import { OrderStatus } from "../models/enums/order-status";
-import { ProductEntity } from "./product.entity";
 import { OrderProductEntity } from "./order-product.entity";
+import * as crypto from "crypto";
 
 @Entity({ name: "orders" })
 export class OrderEntity {
@@ -23,6 +25,26 @@ export class OrderEntity {
   })
   @PrimaryGeneratedColumn("uuid")
   id: string;
+
+  @ApiProperty({
+    example: 2,
+    description: "The order number of order",
+  })
+  @Generated("increment")
+  @Column({ unique: true, nullable: false })
+  orderNumber: number;
+
+  @ApiProperty({
+    example: "GD0000003458",
+    description: "The unique user friendly id of order",
+  })
+  @Column({
+    generatedType: "STORED",
+    asExpression: "'GD' || LPAD(\"orderNumber\"::text, 7, '0')",
+    unique: true,
+    nullable: false,
+  })
+  orderId: string;
 
   @ApiProperty({
     example: UserEntity,
@@ -61,23 +83,23 @@ export class OrderEntity {
     example: "2500.00",
     description: "The total price of order calculated with discounts",
   })
-  @Column()
-  totalPrice: string;
+  @Column({ type: "numeric", precision: 20, scale: 2 })
+  totalPrice: number;
 
   @ApiProperty({
     example: "2800.00",
     description:
       "The original price of order used original price of products (not calculated discounts)",
   })
-  @Column()
-  originalPrice: string;
+  @Column({ type: "numeric", precision: 20, scale: 2 })
+  originalPrice: number;
 
   @ApiProperty({
     example: "300.00",
     description: "The total price of used discounts",
   })
-  @Column()
-  discounts: string;
+  @Column({ type: "numeric", precision: 20, scale: 2 })
+  discounts: number;
 
   @ApiProperty({
     example: 3,
@@ -90,9 +112,7 @@ export class OrderEntity {
     example: [OrderProductEntity, OrderProductEntity],
     description: "The order product details belongs to current order",
   })
-  @OneToMany(() => OrderProductEntity, (orderProduct) => orderProduct.order, {
-    nullable: true,
-  })
+  @OneToMany(() => OrderProductEntity, (orderProduct) => orderProduct.order)
   @JoinColumn()
   orderProducts?: OrderProductEntity[];
 
@@ -109,4 +129,17 @@ export class OrderEntity {
   })
   @UpdateDateColumn()
   updated_at: Date;
+
+  @AfterInsert()
+  generateOrderId(): void {
+    const orderIdString = this.orderNumber.toString();
+    const orderNumberLength = orderIdString.length;
+    this.orderId = "GD";
+    if (orderNumberLength < 10) {
+      for (let i = 1; i <= 10 - orderNumberLength; i++) {
+        this.orderId += "0";
+      }
+    }
+    this.orderId += orderIdString;
+  }
 }

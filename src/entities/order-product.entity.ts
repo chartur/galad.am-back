@@ -47,15 +47,15 @@ export class OrderProductEntity {
     example: "800.00",
     description: "The price which used for order the product",
   })
-  @Column()
-  price: string;
+  @Column({ type: "numeric", precision: 20, scale: 2 })
+  price: number;
 
   @ApiProperty({
     example: "800.00",
     description: "The price which used for order the product",
   })
-  @Column()
-  totalPrice: string;
+  @Column({ type: "numeric", precision: 20, scale: 2 })
+  totalPrice: number;
 
   @ApiProperty({
     example: "2011-10-05T14:48:00.000Z",

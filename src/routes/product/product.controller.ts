@@ -48,7 +48,7 @@ export class ProductController {
     private productAssetService: ProductAssetService,
   ) {}
 
-  @Get("/by-status/:status")
+  @Get("/by-status/:status?")
   @ApiBearerAuth()
   @ApiOperation({
     summary: "Get products by status",

@@ -36,7 +36,12 @@ export class ProductAssetEntity {
     example: ProductAssetType.Photo,
     description: "The type of asset",
   })
-  @Column()
+  @Column({
+    type: "enum",
+    enum: ProductAssetType,
+    nullable: false,
+    default: ProductAssetType.Photo,
+  })
   type: ProductAssetType;
 
   @ApiProperty({
