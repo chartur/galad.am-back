@@ -11,6 +11,7 @@ const swaggerSetup = (app: any, version: string): void => {
     .addBearerAuth()
     .addServer("http://localhost:3000")
     .addServer("https://data.galad.am")
+    .addServer("https://api.galad.am")
     .setTitle("Galad")
     .setDescription("API documentation of galad.am")
     .setVersion(version)
@@ -29,6 +30,6 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   swaggerSetup(app, "1.0");
-  await app.listen(3000);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
