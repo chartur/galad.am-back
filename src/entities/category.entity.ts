@@ -12,7 +12,6 @@ import { ApiProperty } from "@nestjs/swagger";
 import { CategoryStatus } from "../models/enums/category-status";
 import fs from "fs";
 import { ProductEntity } from "./product.entity";
-import { ProductAssetEntity } from "./product-asset.entity";
 
 @Entity({ name: "categories" })
 export class CategoryEntity {

@@ -22,7 +22,7 @@ export class ProductAssetService {
     body: SaveProductAssetsDto,
     files: Array<Express.Multer.File>,
   ): Promise<ProductEntity> {
-    this.logger.log("[Product] save settings", {
+    this.logger.log("[Product] save assets", {
       id,
       body,
     });
