@@ -58,7 +58,7 @@ export class ProductAssetService {
       }
     }
 
-    if (files.length > 0) {
+    if (files && files.length > 0) {
       const newAssetsPromise = files.map((file) =>
         this.productAssetEntityRepository.save(
           this.productAssetEntityRepository.create({
@@ -102,6 +102,8 @@ export class ProductAssetService {
 
     // Set fist image as main image of product
     if (
+      product.assets &&
+      product.assets.length > 0 &&
       !product.assets.some(
         (asset) => asset.type === ProductAssetType.Photo && asset.is_main,
       )
@@ -113,7 +115,6 @@ export class ProductAssetService {
       await this.productAssetEntityRepository.save(firstPhotoAsset);
     }
 
-    await this.productEntityRepository.save(product);
     return this.productEntityRepository.preload(product);
   }
 
