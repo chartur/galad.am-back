@@ -34,27 +34,31 @@ export class ProductAssetService {
       relations: ["assets", "category"],
     });
 
-    const oldPhotos = body.oldPhotos;
+    const oldPhotos = body.oldPhotos || [];
     const photosNeedToBeDeleted = product.assets.filter(
       (asset) =>
         asset.type === ProductAssetType.Photo &&
         !oldPhotos.some((item) => item === asset.id),
     );
 
-    await this.productAssetEntityRepository.remove(photosNeedToBeDeleted);
+    if (photosNeedToBeDeleted.length > 0) {
+      await this.productAssetEntityRepository.remove(photosNeedToBeDeleted);
+    }
 
     let assets = [];
 
-    if (oldPhotos) {
+    if (oldPhotos.length > 0) {
       const previouslyUploadedPhotos = product.assets.filter(
         (asset) =>
           asset.type === ProductAssetType.Photo && oldPhotos.includes(asset.id),
       );
 
-      assets = [...previouslyUploadedPhotos];
+      if (previouslyUploadedPhotos.length > 0) {
+        assets = [...previouslyUploadedPhotos];
+      }
     }
 
-    if (files) {
+    if (files.length > 0) {
       const newAssetsPromise = files.map((file) =>
         this.productAssetEntityRepository.save(
           this.productAssetEntityRepository.create({
