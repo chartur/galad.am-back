@@ -63,6 +63,9 @@ export class ProductService {
     const [data, count] = await this.productEntityRepository.findAndCount({
       ...findOptions,
       relations: ["assets", "category"],
+      order: {
+        id: "DESC",
+      },
     });
 
     return {
@@ -78,6 +81,9 @@ export class ProductService {
         status: ProductStatus.Active,
       },
       relations: ["category", "assets"],
+      order: {
+        id: "DESC",
+      },
     });
   }
 
@@ -347,6 +353,7 @@ export class ProductService {
           is_new_arrival: true,
         },
       )
+      .orderBy("products.id", "DESC")
       .getMany();
 
     return categories;
