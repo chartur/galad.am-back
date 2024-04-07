@@ -10,13 +10,13 @@ export class FilterController {
   constructor(private filterService: FilterService) {}
 
   @ApiOperation({
-    summary: "Disable category",
-    description: "PUT request should disable category",
+    summary: "Filter Products",
+    description: "GET request should get products by applied filter",
   })
   @ApiResponse({
     status: 200,
     type: [ProductEntity],
-    description: "The record successfully updated/created",
+    description: "The record successfully loaded",
   })
   @Post("/")
   public filter(@Body() body: FilterRequestDto): Promise<ProductEntity[]> {

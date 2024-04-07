@@ -23,6 +23,7 @@ export class FilterService {
       .leftJoinAndSelect("products.category", "category")
       .leftJoinAndSelect("products.assets", "assets")
       .leftJoinAndSelect("products.tags", "tags")
+      .orderBy("products.id", "DESC")
       .andWhere("products.status = :productStatus", {
         productStatus: ProductStatus.Active,
       })
