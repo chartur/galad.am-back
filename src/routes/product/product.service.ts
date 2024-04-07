@@ -189,7 +189,7 @@ export class ProductService {
       where: {
         id,
       },
-      relations: ["assets", "category"],
+      relations: ["assets", "category", "tags"],
     });
   }
 
