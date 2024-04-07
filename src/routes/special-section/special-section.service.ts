@@ -33,6 +33,9 @@ export class SpecialSectionService {
       where: {
         status: SpecialSectionStatus.Active,
       },
+      order: {
+        id: "asc"
+      },
     });
   }
 

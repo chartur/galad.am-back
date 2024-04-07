@@ -19,6 +19,13 @@ export class CategoryEntity {
   @PrimaryGeneratedColumn("increment")
   id: number;
 
+  @ApiProperty({ example: 1, description: "The order number of Category" })
+  @Column({
+    type: "int",
+    default: 1,
+  })
+  ordering: number;
+
   @ApiProperty({
     example: [ProductEntity, ProductEntity],
     description: "Products that belongs to current category",
