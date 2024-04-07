@@ -3,7 +3,7 @@ import { DataTablePayloadDto } from "../../core/dto/data-table-payload.dto";
 import { PaginationResponseDto } from "../../core/dto/pagination-response.dto";
 import { NameColumnsLanguages } from "../../core/constants/name-columns.languages";
 import { DescriptionColumnsLanguages } from "../../core/constants/description-columns.languages";
-import { ILike, Not, Repository } from "typeorm";
+import { ILike, In, Not, Repository } from "typeorm";
 import { CategoryStatus } from "../../models/enums/category-status";
 import {
   CategoryEntity,
@@ -17,6 +17,7 @@ import { CategoryRepository } from "../../repositories/category.repository";
 import * as fs from "fs";
 import { ProductStatus } from "../../models/enums/product-status";
 import { ProductEntity } from "../../entities/product.entity";
+import { EntityOrderingRequestDto } from "../../core/dto/entity-ordering.request.dto";
 
 const unlinkFilePromise = promisify(fs.unlink);
 
@@ -86,6 +87,7 @@ export class CategoryService {
       .leftJoin("categories.products", "products")
       .addSelect("COUNT(DISTINCT(products.id)) as products_count")
       .groupBy("categories.id")
+      .orderBy("ordering", "ASC")
       .execute();
   }
 
@@ -198,5 +200,16 @@ export class CategoryService {
         id,
       },
     });
+  }
+
+  public async setOrdering(body: EntityOrderingRequestDto): Promise<void> {
+    this.logger.log("[Category] ordering", body);
+    const updatePromise = body.orders.map((order) =>
+      this.categoryEntityRepository.update(
+        { id: order.entityId as number },
+        { ordering: order.orderNumber },
+      ),
+    );
+    return await Promise.all(updatePromise).then();
   }
 }

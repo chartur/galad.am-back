@@ -35,6 +35,7 @@ import { Uploader } from "../../utils/uploader";
 import { DeleteUploadedFileOnErrorFilter } from "../../core/filters/delete-uploaded-file-on-error.filter";
 import { CreateCategoryDto } from "../../core/dto/category/create-category.dto";
 import { UpdateCategoryDto } from "../../core/dto/category/update-category.dto";
+import { EntityOrderingRequestDto } from "../../core/dto/entity-ordering.request.dto";
 
 @ApiTags("Category")
 @Controller("category")
@@ -88,6 +89,22 @@ export class CategoryController {
     @Param("id") categoryId: number,
   ): Promise<CategoryEntity> {
     return this.categoryService.getCategoryById(categoryId);
+  }
+
+  @Put("/ordering")
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: "Order Categories",
+    description: "PUT request should update ordering of categories",
+  })
+  @ApiResponse({
+    status: 200,
+    type: null,
+    description: "The records successfully updated",
+  })
+  @UseGuards(AdminGuard)
+  public setOrdering(@Body() body: EntityOrderingRequestDto): Promise<void> {
+    return this.categoryService.setOrdering(body);
   }
 
   @Put(":id")
