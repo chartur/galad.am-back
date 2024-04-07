@@ -1,10 +1,11 @@
-import { IsNotEmpty, IsNumber, IsOptional } from "class-validator";
+import {IsNotEmpty, IsNumber, IsOptional, Min} from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class SaveProductValuesDto {
   @ApiProperty({ required: false, description: "Original price" })
   @IsOptional()
   @IsNumber()
+  @Min(100)
   price: number;
 
   @ApiProperty({ required: false, description: "Discounted price" })
