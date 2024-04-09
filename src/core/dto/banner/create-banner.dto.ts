@@ -1,36 +1,61 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsOptional, IsString } from "class-validator";
+import { LinkOpenHandler } from "../../../models/enums/link-open-handler";
 
 export class CreateBannerDto {
-  @ApiProperty({ required: true, description: "Armenian title" })
+  @ApiProperty({ required: false, description: "Armenian title" })
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   am_title: string;
 
-  @ApiProperty({ required: true, description: "English title" })
+  @ApiProperty({ required: false, description: "English title" })
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   en_title: string;
 
-  @ApiProperty({ required: true, description: "Russian title" })
+  @ApiProperty({ required: false, description: "Russian title" })
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   ru_title: string;
 
-  @ApiProperty({ required: true, description: "Armenian description" })
+  @ApiProperty({ required: false, description: "Armenian description" })
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   am_description: string;
 
-  @ApiProperty({ required: true, description: "English description" })
+  @ApiProperty({ required: false, description: "English description" })
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   en_description: string;
 
-  @ApiProperty({ required: true, description: "Russian description" })
+  @ApiProperty({ required: false, description: "Russian description" })
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   ru_description: string;
+
+  @ApiProperty({ required: false, description: "Armenian button text" })
+  @IsOptional()
+  @IsString()
+  am_button_text: string;
+
+  @ApiProperty({ required: false, description: "English button text" })
+  @IsOptional()
+  @IsString()
+  en_button_text: string;
+
+  @ApiProperty({ required: false, description: "Russian button text" })
+  @IsOptional()
+  @IsString()
+  ru_button_text: string;
+
+  @ApiProperty({ required: false, description: "Link of button" })
+  @IsOptional()
+  @IsString()
+  button_link: string;
+
+  @ApiProperty({ required: false, description: "Link open handler type" })
+  @IsOptional()
+  url_open_handle: LinkOpenHandler;
 
   @ApiProperty({
     required: true,

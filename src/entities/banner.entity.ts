@@ -21,35 +21,45 @@ export class BannerEntity {
     example: "Գեղեցիկ զարդեր",
     description: "The Armenian title of banner",
   })
-  @Column()
+  @Column({
+    nullable: true,
+  })
   am_title: string;
 
   @ApiProperty({
     example: "Beautiful jewelry",
     description: "The English title of banner",
   })
-  @Column()
+  @Column({
+    nullable: true,
+  })
   en_title: string;
 
   @ApiProperty({
     example: "Красивые украшения",
     description: "The Russian title of banner",
   })
-  @Column()
+  @Column({
+    nullable: true,
+  })
   ru_title: string;
 
   @ApiProperty({
     example: "Արծաթյա զարդեր նրբաոճ քարերով և ունիկալ շղթաներով",
     description: "The Armenian description of banner",
   })
-  @Column()
+  @Column({
+    nullable: true,
+  })
   am_description: string;
 
   @ApiProperty({
     example: "Silver jewelry with elegant stones and unique chains",
     description: "The English description of banner",
   })
-  @Column()
+  @Column({
+    nullable: true,
+  })
   en_description: string;
 
   @ApiProperty({
@@ -57,28 +67,30 @@ export class BannerEntity {
       "Серебряные украшения с элегантными камнями и уникальными цепочками",
     description: "The Russian description of banner",
   })
-  @Column()
+  @Column({
+    nullable: true,
+  })
   ru_description: string;
 
   @ApiProperty({
     example: "Տեսնել ավելին",
     description: "The Armenian text on the button",
   })
-  @Column({ default: "Տեսնել ավելին" })
+  @Column({ nullable: true })
   am_button_text: string;
 
   @ApiProperty({
     example: "See more",
     description: "The English text on the button",
   })
-  @Column({ default: "See more" })
+  @Column({ nullable: true })
   en_button_text: string;
 
   @ApiProperty({
     example: "Узнать больше",
     description: "The Russian text on the button",
   })
-  @Column({ default: "Узнать больше" })
+  @Column({ nullable: true })
   ru_button_text: string;
 
   @ApiProperty({
