@@ -13,7 +13,9 @@ export class ProductRepository {
       if (!product[key]?.trim()) {
         invalidFields.push({
           filed: key,
-          message: `${key} is required for product activation`,
+          message: `"${key
+            .toUpperCase()
+            .replace("_", " ")}" is required for product activation`,
         });
       }
     });
@@ -33,7 +35,7 @@ export class ProductRepository {
       invalidFields.push({
         filed: "assets",
         message:
-          "Product should has at least 2 photos uploaded before activation",
+          "Product should has at least 1 photos uploaded before activation",
       });
     }
 
@@ -48,7 +50,9 @@ export class ProductRepository {
       if (!product[key]) {
         invalidFields.push({
           filed: key,
-          message: `${key} is required for product activation`,
+          message: `"${key
+            .toUpperCase()
+            .replace("_", " ")}" is required for product activation`,
         });
       }
     });
