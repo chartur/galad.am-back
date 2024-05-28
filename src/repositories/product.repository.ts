@@ -29,7 +29,7 @@ export class ProductRepository {
       (item) => item.type === ProductAssetType.Photo,
     );
 
-    if (photos?.length < 2) {
+    if (photos?.length === 0) {
       invalidFields.push({
         filed: "assets",
         message:
