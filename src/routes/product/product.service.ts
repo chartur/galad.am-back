@@ -234,15 +234,26 @@ export class ProductService {
     const product = await this.productEntityRepository.findOneOrFail({
       where: {
         id,
-        status: Not(ProductStatus.Active),
       },
       relations: ["assets", "category", "tags"],
     });
 
-    if (product.category.status !== CategoryStatus.Active) {
-      throw new BadRequestException({
-        message: "Category should be activated!",
-      });
+    if (product.status === ProductStatus.Active) {
+      throw new BadRequestException([
+        {
+          field: "status",
+          message: "Product already activated!",
+        },
+      ]);
+    }
+
+    if (product.category?.status !== CategoryStatus.Active) {
+      throw new BadRequestException([
+        {
+          field: "category",
+          message: "Category should be activated!",
+        },
+      ]);
     }
 
     const activationValidation =
