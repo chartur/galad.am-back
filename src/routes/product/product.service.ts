@@ -354,13 +354,13 @@ export class ProductService {
       .leftJoinAndSelect("categories.products", "products")
       .leftJoinAndSelect("products.assets", "assets")
       .leftJoinAndSelect("products.tags", "tags")
-      .where("categories.status = :status", {
-        status: CategoryStatus.Active,
+      .where("categories.status = :categoryStatus", {
+        categoryStatus: CategoryStatus.Active,
       })
       .andWhere(
-        "products.status = :status AND products.is_new_arrival = :is_new_arrival",
+        "products.status = :productStatus AND products.is_new_arrival = :is_new_arrival",
         {
-          status: ProductStatus.Active,
+          productStatus: ProductStatus.Active,
           is_new_arrival: true,
         },
       )
