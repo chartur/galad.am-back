@@ -5,7 +5,6 @@ import { ValidationPipe } from "@nestjs/common";
 import { EntityNotFoundExceptionFilter } from "./core/filters/entity-not-found-exception.filter";
 import { join } from "path";
 import { NestExpressApplication } from "@nestjs/platform-express";
-import * as bodyParser from "body-parser";
 
 const swaggerSetup = (app: any, version: string): void => {
   const config = new DocumentBuilder()
@@ -24,13 +23,12 @@ const swaggerSetup = (app: any, version: string): void => {
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.use(bodyParser.json({ limit: "50mb" }));
-  app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
   app.enableCors();
   app.useStaticAssets(join(__dirname, "..", "public"));
   app.useGlobalFilters(new EntityNotFoundExceptionFilter());
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useBodyParser("json", { limit: "100mb" });
 
   swaggerSetup(app, "1.0");
   await app.listen(process.env.PORT || 3000);
