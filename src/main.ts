@@ -28,7 +28,6 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, "..", "public"));
   app.useGlobalFilters(new EntityNotFoundExceptionFilter());
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
-  app.useBodyParser("json", { limit: "100mb" });
 
   swaggerSetup(app, "1.0");
   await app.listen(process.env.PORT || 3000);
