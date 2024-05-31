@@ -42,6 +42,15 @@ export class ProductEntity {
   assets?: ProductAssetEntity[];
 
   @ApiProperty({
+    example: "/public/product/1/assets/test.png",
+    description: "The path of main photo",
+  })
+  @Column({
+    nullable: true,
+  })
+  mainAsset: string;
+
+  @ApiProperty({
     example: [SpecialSectionEntity],
     description: "The sections that product belongs to",
   })
@@ -155,10 +164,4 @@ export class ProductEntity {
   })
   @UpdateDateColumn()
   updated_at: Date;
-
-  @VirtualColumn({
-    query: (alias) =>
-      `SELECT "link" FROM "product_assets" WHERE "productId" = ${alias}.id and type='photo' and is_main=true`,
-  })
-  mainAsset: string;
 }

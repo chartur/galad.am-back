@@ -113,6 +113,7 @@ export class ProductAssetService {
       );
       firstPhotoAsset.is_main = true;
       await this.productAssetEntityRepository.save(firstPhotoAsset);
+      product.mainAsset = firstPhotoAsset.link;
     }
 
     return this.productEntityRepository.preload(product);
@@ -124,14 +125,24 @@ export class ProductAssetService {
       assetId,
     });
 
+    const product = await this.productEntityRepository.findOneOrFail({
+      where: {
+        id: productId,
+      },
+      relations: ["assets"],
+    });
+
     await this.productAssetEntityRepository.update(
       { product: { id: productId } },
       { is_main: false },
     );
+    const mainAsset = product.assets.find((asset) => asset.id === assetId);
+    mainAsset.is_main = true;
+    product.mainAsset = mainAsset.link;
 
-    await this.productAssetEntityRepository.update(
-      { product: { id: productId }, id: assetId },
-      { is_main: true },
-    );
+    await Promise.all([
+      this.productAssetEntityRepository.save(mainAsset),
+      this.productEntityRepository.save(product),
+    ]);
   }
 }
