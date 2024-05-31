@@ -8,7 +8,6 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  VirtualColumn,
 } from "typeorm";
 import { CategoryEntity } from "./category.entity";
 import { ProductAssetEntity } from "./product-asset.entity";
