@@ -40,10 +40,13 @@ export class ProductService {
       status: status || Not(ProductStatus.Draft),
     };
 
-    const findOptions = {
+    const findOptions: any = {
       skip: (query.page - 1) * query.limit,
       take: query.limit < 0 ? undefined : query.limit,
       where: whereCondition,
+      order: {
+        id: "DESC",
+      },
     };
 
     if (query.filter) {
@@ -57,15 +60,12 @@ export class ProductService {
     }
 
     if (query.sortBy) {
-      findOptions["order"] = _.set({}, query.sortBy, query.order);
+      findOptions.order = _.set({}, query.sortBy, query.order);
     }
 
     const [data, count] = await this.productEntityRepository.findAndCount({
       ...findOptions,
       relations: ["assets", "category"],
-      order: {
-        id: "DESC",
-      },
     });
 
     return {
