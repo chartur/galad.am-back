@@ -114,6 +114,7 @@ export class ProductAssetService {
       firstPhotoAsset.is_main = true;
       await this.productAssetEntityRepository.save(firstPhotoAsset);
       product.mainAsset = firstPhotoAsset.link;
+      await this.productEntityRepository.save(product);
     }
 
     return this.productEntityRepository.preload(product);
