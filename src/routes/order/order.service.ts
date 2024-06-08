@@ -10,7 +10,6 @@ import { UserEntity } from "../../entities/user.entity";
 import { PaginationResponseDto } from "../../core/dto/pagination-response.dto";
 import { OrderFilterDto } from "../../core/dto/order/order-filter.dto";
 import { PusherService } from "../../shared/services/pusher.service";
-import process from "process";
 
 @Injectable()
 export class OrderService {
@@ -101,6 +100,7 @@ export class OrderService {
       });
       return order;
     } catch (e) {
+      this.logger.error("[Order] can not create new order", e);
       await queryRunner.rollbackTransaction();
       throw e;
     } finally {
