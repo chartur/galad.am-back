@@ -1,6 +1,5 @@
 import {
   AfterInsert,
-  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
@@ -15,7 +14,6 @@ import { ApiProperty } from "@nestjs/swagger";
 import { UserEntity } from "./user.entity";
 import { OrderStatus } from "../models/enums/order-status";
 import { OrderProductEntity } from "./order-product.entity";
-import * as crypto from "crypto";
 
 @Entity({ name: "orders" })
 export class OrderEntity {

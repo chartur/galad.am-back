@@ -9,6 +9,8 @@ import { ResponseUser } from "../../core/interfaces/response-user";
 import { UserEntity } from "../../entities/user.entity";
 import { PaginationResponseDto } from "../../core/dto/pagination-response.dto";
 import { OrderFilterDto } from "../../core/dto/order/order-filter.dto";
+import { PusherService } from "../../shared/services/pusher.service";
+import process from "process";
 
 @Injectable()
 export class OrderService {
@@ -21,6 +23,7 @@ export class OrderService {
     @InjectRepository(ProductEntity)
     private productEntityRepository: Repository<ProductEntity>,
     private dataSource: DataSource,
+    private pusherService: PusherService,
   ) {}
 
   async create(
@@ -88,6 +91,14 @@ export class OrderService {
       await queryRunner.manager.save(OrderEntity, order);
       await queryRunner.manager.save(ProductEntity, products);
       await queryRunner.commitTransaction();
+      this.pusherService.emit({
+        title: "New Order",
+        body: "You have new order GD000024",
+        icon: "https://galad.am/assets/logo.png",
+        data: {
+          link: `${process.env.adminUrl}/portal/order/${order.id}`,
+        },
+      });
       return order;
     } catch (e) {
       await queryRunner.rollbackTransaction();

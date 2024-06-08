@@ -22,6 +22,14 @@ export class ProductEntity {
   @PrimaryGeneratedColumn("increment")
   id: number;
 
+  @Column({
+    generatedType: "STORED",
+    asExpression: "'GD' || LPAD(\"id\"::text, 3, '0')",
+    unique: true,
+    nullable: false,
+  })
+  serialNumber: string;
+
   @ApiProperty({
     example: CategoryEntity,
     description: "The Category of product",
