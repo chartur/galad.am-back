@@ -12,11 +12,16 @@ export class PusherService {
   private _subscriptions: Record<string, NotificationSettingsDto> = {};
 
   constructor() {
-    const pusherString = fs.readFileSync(
-      `${process.cwd()}/pusher.json`,
-      "utf-8",
-    );
-    this._subscriptions = JSON.parse(pusherString);
+    if (fs.existsSync(`${process.cwd()}/pusher.json`)) {
+      const pusherString = fs.readFileSync(
+        `${process.cwd()}/pusher.json`,
+        "utf-8",
+      );
+      this._subscriptions = JSON.parse(pusherString);
+    } else {
+      this._subscriptions = {};
+    }
+
     webPush.setVapidDetails(
       "mailto:1995.chilingaryan@gmali.com",
       process.env.pusherPublicKey,
