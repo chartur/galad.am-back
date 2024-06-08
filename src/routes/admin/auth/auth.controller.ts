@@ -19,11 +19,17 @@ import { AdminGuard } from "../../../shared/guards/admin.guard";
 import { AuthUserService } from "../../../shared/services/auth-user.service";
 import { AuthRole } from "../../../core/constants/auth-role.enum";
 import { AuthorizationResponse } from "../../../core/dto/auth/authorization-response";
+import { NotificationSettingsDto } from "../../../core/dto/auth/notification-settings.dto";
+import { AuthAdmin } from "../../../core/decorators/auth-admin.decorator";
+import { PusherService } from "../../../shared/services/pusher.service";
 
 @ApiTags("Admin Auth")
 @Controller("auth/admin")
 export class AuthController {
-  constructor(private authUserService: AuthUserService) {}
+  constructor(
+    private authUserService: AuthUserService,
+    private pusherService: PusherService,
+  ) {}
 
   @Post("sign-in")
   @ApiOperation({
@@ -75,5 +81,25 @@ export class AuthController {
       headers["authorization"],
       AuthRole.admin,
     );
+  }
+
+  @Post("notification-settings")
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: "Store push notification credentials",
+    description:
+      "This POST request should store push notification credentials of admin user",
+  })
+  @ApiResponse({
+    status: 200,
+    description: "The record found",
+    type: void 0,
+  })
+  @UseGuards(AdminGuard)
+  public notificationSettings(
+    @AuthAdmin() admin,
+    @Body() body: NotificationSettingsDto,
+  ): void {
+    return this.pusherService.subscribe(body);
   }
 }

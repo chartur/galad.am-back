@@ -9,6 +9,7 @@ import {
 import { ApiProperty } from "@nestjs/swagger";
 import * as bcrypt from "bcrypt";
 import { AuthUser } from "../core/interfaces/auth-user";
+import {NotificationSettingsDto} from "../core/dto/auth/notification-settings.dto";
 
 export const ADMIN_USER_PASSWORD_SALT = 10;
 export const AUTH_SECRET = "ADMIN_AUTH_SECRET_KEY";

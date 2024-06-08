@@ -37,3 +37,4 @@ lerna-debug.log*
 /public
 .local.env
 public.zip
+pusher.json
