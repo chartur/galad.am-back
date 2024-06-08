@@ -4,7 +4,6 @@ import * as webPush from "web-push";
 import * as process from "process";
 import { PushNotification } from "../../models/push-notification";
 import * as fs from "fs";
-import * as path from "path";
 
 @Injectable()
 export class PusherService {
@@ -36,17 +35,7 @@ export class PusherService {
     });
     if (!this._subscriptions[subscription.keys.auth]) {
       this._subscriptions[subscription.keys.auth] = subscription;
-      fs.writeFile(
-        `${process.cwd()}/pusher.json`,
-        JSON.stringify(this._subscriptions, null, 4),
-        (err) => {
-          if (err) {
-            this.logger.error(
-              "[Pusher] unable to store in the pusher.json file",
-            );
-          }
-        },
-      );
+      this.updatePusherJson();
     }
   }
 
@@ -55,7 +44,24 @@ export class PusherService {
       payload: payload,
     });
     Object.values(this._subscriptions).forEach((subscription) => {
-      webPush.sendNotification(subscription, JSON.stringify(payload));
+      try {
+        webPush.sendNotification(subscription, JSON.stringify(payload));
+      } catch (e) {
+        delete this._subscriptions[subscription.keys.auth];
+        this.updatePusherJson();
+      }
     });
+  }
+
+  private updatePusherJson() {
+    fs.writeFile(
+      `${process.cwd()}/pusher.json`,
+      JSON.stringify(this._subscriptions, null, 4),
+      (err) => {
+        if (err) {
+          this.logger.error("[Pusher] unable to store in the pusher.json file");
+        }
+      },
+    );
   }
 }
