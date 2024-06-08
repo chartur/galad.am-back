@@ -33,8 +33,8 @@ export class PusherService {
       new: subscription,
       subscriptionsCount: Object.keys(this._subscriptions).length,
     });
-    if (!this._subscriptions[subscription.keys.auth]) {
-      this._subscriptions[subscription.keys.auth] = subscription;
+    if (!this._subscriptions[subscription.endpoint]) {
+      this._subscriptions[subscription.endpoint] = subscription;
       this.updatePusherJson();
     }
   }
@@ -44,12 +44,13 @@ export class PusherService {
       payload: payload,
     });
     Object.values(this._subscriptions).forEach((subscription) => {
-      try {
-        webPush.sendNotification(subscription, JSON.stringify(payload));
-      } catch (e) {
-        delete this._subscriptions[subscription.keys.auth];
-        this.updatePusherJson();
-      }
+      webPush
+        .sendNotification(subscription, JSON.stringify(payload))
+        .catch((e) => {
+          this.logger.error("[Pusher] send notification error", e);
+          delete this._subscriptions[subscription.endpoint];
+          this.updatePusherJson();
+        });
     });
   }
 
