@@ -15,6 +15,7 @@ import { ProductStatus } from "../models/enums/product-status";
 import { ApiProperty } from "@nestjs/swagger";
 import { SpecialSectionEntity } from "./special-section.entity";
 import { TagEntity } from "./tag.entity";
+import { Gender } from "../models/enums/gender";
 
 @Entity({ name: "products" })
 export class ProductEntity {
@@ -37,6 +38,17 @@ export class ProductEntity {
   @ManyToOne(() => CategoryEntity, { nullable: true })
   @JoinColumn()
   category?: CategoryEntity;
+
+  @ApiProperty({
+    example: Gender.Female,
+    description: "The Gender which can use the product",
+  })
+  @Column({
+    type: "enum",
+    enum: Gender,
+    nullable: true,
+  })
+  gender?: Gender;
 
   @ApiProperty({
     example: [ProductAssetEntity],
