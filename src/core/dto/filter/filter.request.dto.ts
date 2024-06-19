@@ -1,5 +1,6 @@
 import {IsArray, IsBoolean, IsNumber, IsOptional, IsString, Min} from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import {Gender} from "../../../models/enums/gender";
 
 export class FilterRequestDto {
   @ApiProperty({
@@ -9,6 +10,11 @@ export class FilterRequestDto {
   @IsArray()
   @IsOptional()
   category?: number[];
+
+  @ApiProperty({ required: false, description: "Gender type of products" })
+  @IsArray()
+  @IsOptional()
+  gender?: Gender[];
 
   @ApiProperty({ required: false, description: "Minimum price for filter" })
   @IsNumber()

@@ -217,6 +217,7 @@ export class ProductService {
       ...product,
       tags: body.tags.map((id) => ({ id })),
       is_new_arrival: body.is_new_arrival,
+      gender: body.gender,
     });
     return this.productEntityRepository.findOneOrFail({
       where: {

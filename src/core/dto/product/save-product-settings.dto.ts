@@ -1,6 +1,13 @@
-import {IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, Min, NotEquals, ValidateIf} from "class-validator";
+import {
+  IsArray,
+  IsBoolean,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+} from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
+import { Gender } from "../../../models/enums/gender";
 
 export class SaveProductSettingsDto {
   @ApiProperty({ required: false, description: "Category ID of product" })
@@ -23,4 +30,12 @@ export class SaveProductSettingsDto {
   @IsArray()
   @IsNumber({}, { each: true })
   tags: number[];
+
+  @ApiProperty({
+    required: false,
+    description: "The gender of product",
+  })
+  @IsOptional()
+  @IsEnum(Gender)
+  gender: Gender;
 }

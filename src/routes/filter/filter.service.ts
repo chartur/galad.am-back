@@ -31,6 +31,12 @@ export class FilterService {
         categoryStatus: CategoryStatus.Active,
       });
 
+    if (body?.gender?.length > 0) {
+      query = query.andWhere("products.gender IN (:...gender)", {
+        gender: body.gender,
+      });
+    }
+
     if (body.sale) {
       query = query.andWhere("products.new_price > 0");
     }
