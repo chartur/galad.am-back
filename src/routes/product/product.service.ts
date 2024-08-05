@@ -53,6 +53,7 @@ export class ProductService {
       findOptions["where"] = [
         ...NameColumnsLanguages,
         ...DescriptionColumnsLanguages,
+        "serialNumber",
       ].map((column) => ({
         ...whereCondition,
         [column]: ILike(`%${query.filter.trim()}%`),

@@ -2,7 +2,6 @@ import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { DataTablePayloadDto } from "../../core/dto/data-table-payload.dto";
 import { PaginationResponseDto } from "../../core/dto/pagination-response.dto";
 import { NameColumnsLanguages } from "../../core/constants/name-columns.languages";
-import { DescriptionColumnsLanguages } from "../../core/constants/description-columns.languages";
 import { ILike, In, Not, Repository } from "typeorm";
 import { CategoryStatus } from "../../models/enums/category-status";
 import {
@@ -18,7 +17,7 @@ import * as fs from "fs";
 import { ProductStatus } from "../../models/enums/product-status";
 import { ProductEntity } from "../../entities/product.entity";
 import { EntityOrderingRequestDto } from "../../core/dto/entity-ordering.request.dto";
-
+import { Raw } from "typeorm";
 const unlinkFilePromise = promisify(fs.unlink);
 
 @Injectable()
@@ -52,13 +51,15 @@ export class CategoryService {
     };
 
     if (query.filter) {
-      findOptions["where"] = [
-        ...NameColumnsLanguages,
-        ...DescriptionColumnsLanguages,
-      ].map((column) => ({
+      findOptions["where"] = [...NameColumnsLanguages].map((column) => ({
         ...whereCondition,
         [column]: ILike(`%${query.filter.trim()}%`),
       }));
+      findOptions["where"].push({
+        id: Raw((alias) => `CAST(${alias} AS TEXT) ILike :filter`, {
+          filter: `%${query.filter.trim()}%`,
+        }),
+      });
     }
 
     if (query.sortBy) {
