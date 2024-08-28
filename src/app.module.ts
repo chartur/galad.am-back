@@ -16,6 +16,8 @@ import { ProfileModule } from "./routes/profile/profile.module";
 import { FilterModule } from "./routes/filter/filter.module";
 import { OrderModule } from "./routes/order/order.module";
 import { SeoModule } from "./routes/seo/seo.module";
+import { FakeCommentModule } from "./routes/fakes-comments/fake-comment.module";
+import { ProductReviewsModule } from "./routes/product-reviews/product-reviews.module";
 
 @Module({
   imports: [
@@ -49,6 +51,8 @@ import { SeoModule } from "./routes/seo/seo.module";
     FilterModule,
     OrderModule,
     SeoModule,
+    FakeCommentModule,
+    ProductReviewsModule,
   ],
   providers: [],
   controllers: [AppController],

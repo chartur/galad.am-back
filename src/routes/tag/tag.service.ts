@@ -73,13 +73,16 @@ export class TagService {
     return this.tagEntityRepository.save(tag);
   }
 
-  public updateTag(tagId: number, body: UpdateTagDto): Promise<TagEntity> {
+  public async updateTag(
+    tagId: number,
+    body: UpdateTagDto,
+  ): Promise<TagEntity> {
     this.logger.log("[Tag] update tag by id", {
       id: tagId,
       body: body,
     });
 
-    const tag = this.tagEntityRepository.findOneOrFail({
+    const tag = await this.tagEntityRepository.findOneOrFail({
       where: {
         id: tagId,
       },
