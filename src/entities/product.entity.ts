@@ -16,6 +16,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { SpecialSectionEntity } from "./special-section.entity";
 import { TagEntity } from "./tag.entity";
 import { Gender } from "../models/enums/gender";
+import { FakeCommentEntity } from "./fake-comment.entity";
 
 @Entity({ name: "products" })
 export class ProductEntity {
@@ -169,6 +170,17 @@ export class ProductEntity {
   })
   @Column({ type: "enum", enum: ProductStatus, default: ProductStatus.Draft })
   status: ProductStatus;
+
+  @ApiProperty({
+    type: () => [FakeCommentEntity],
+    example: [FakeCommentEntity, FakeCommentEntity],
+    description: "Fake commentsProduct of product",
+  })
+  @OneToMany(() => FakeCommentEntity, (fakeComment) => fakeComment.product, {
+    nullable: true,
+  })
+  @JoinColumn()
+  fComments?: FakeCommentEntity[];
 
   @ApiProperty({
     example: "2011-10-05T14:48:00.000Z",

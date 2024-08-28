@@ -17,6 +17,8 @@ export class DeleteUploadedFileOnErrorFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus ? exception.getStatus() : 500;
 
+    console.log("HEREEEEE");
+
     if (request.file) {
       await unlinkFilePromise(request.file.path);
     }

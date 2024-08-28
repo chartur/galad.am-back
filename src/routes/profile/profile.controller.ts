@@ -47,7 +47,7 @@ export class ProfileController {
   })
   @UseInterceptors(
     FileInterceptor("image", {
-      storage: Uploader.fileStore(() => "./public/users"),
+      storage: Uploader.fileStore(() => "./public/user"),
     }),
   )
   @UseFilters(DeleteUploadedFileOnErrorFilter)
