@@ -10,6 +10,7 @@ import { OrderEntity } from "./order.entity";
 import { OrderProductEntity } from "./order-product.entity";
 import { SeoEntity } from "./seo.entity";
 import { FakeCommentEntity } from "./fake-comment.entity";
+import {PromoEntity} from "./promo.entity";
 
 export const ENTITIES = [
   UserEntity,
@@ -24,4 +25,5 @@ export const ENTITIES = [
   OrderProductEntity,
   SeoEntity,
   FakeCommentEntity,
+  PromoEntity,
 ];

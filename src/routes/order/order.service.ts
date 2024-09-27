@@ -10,6 +10,8 @@ import { UserEntity } from "../../entities/user.entity";
 import { PaginationResponseDto } from "../../core/dto/pagination-response.dto";
 import { OrderFilterDto } from "../../core/dto/order/order-filter.dto";
 import { PusherService } from "../../shared/services/pusher.service";
+import { PromoEntity } from "../../entities/promo.entity";
+import {PromoType} from "../../models/enums/promo-type";
 
 @Injectable()
 export class OrderService {
@@ -21,6 +23,8 @@ export class OrderService {
     private orderProductEntityRepository: Repository<OrderProductEntity>,
     @InjectRepository(ProductEntity)
     private productEntityRepository: Repository<ProductEntity>,
+    @InjectRepository(PromoEntity)
+    private promoEntityRepository: Repository<PromoEntity>,
     private dataSource: DataSource,
     private pusherService: PusherService,
   ) {}
@@ -48,6 +52,22 @@ export class OrderService {
         id: In(productIds),
       },
     });
+    if (products.length !== productIds.length) {
+      throw new HttpException(
+        "Unavailable product quantity",
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    let promo: PromoEntity;
+    if (body.promo) {
+      promo = await this.promoEntityRepository.findOneOrFail({
+        where: {
+          code: body.promo,
+          active: true,
+        },
+      });
+    }
 
     const order = this.orderEntityRepository.create();
     if (user) {
@@ -76,10 +96,30 @@ export class OrderService {
       orderProducts.push(orderProduct);
     });
     const discount = originalPrice - totalPrice;
+    let promoDiscount = 0;
+    if (promo) {
+      if (promo.minOrderPrice && originalPrice < promo.minOrderPrice) {
+        throw new HttpException(
+          `To apply Promo code the order original price should be at least ${promo.minOrderPrice}`,
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      switch (promo.type) {
+        case PromoType.FixedPrice:
+          promoDiscount += promo.value;
+          break;
+        case PromoType.Percentage:
+          const discountUnparsed = (totalPrice * promo.value) / 100;
+          promoDiscount += parseFloat(discountUnparsed.toFixed(2));
+          break;
+      }
+      order.promoUsed = promo.code;
+    }
+    totalPrice -= promoDiscount;
     order.totalQuantity = totalQuantity;
     order.totalPrice = totalPrice;
     order.originalPrice = originalPrice;
-    order.discounts = discount;
+    order.discounts = discount + promoDiscount;
     order.orderProducts = orderProducts;
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();

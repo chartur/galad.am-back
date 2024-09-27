@@ -18,6 +18,10 @@ import { OrderModule } from "./routes/order/order.module";
 import { SeoModule } from "./routes/seo/seo.module";
 import { FakeCommentModule } from "./routes/fakes-comments/fake-comment.module";
 import { ProductReviewsModule } from "./routes/product-reviews/product-reviews.module";
+import { PromosModule } from "./routes/promos/promos.module";
+import { TelegramService } from "./shared/services/telegram.service";
+import { SeoService } from "./routes/seo/seo.service";
+import { SeoEntity } from "./entities/seo.entity";
 
 @Module({
   imports: [
@@ -53,8 +57,10 @@ import { ProductReviewsModule } from "./routes/product-reviews/product-reviews.m
     SeoModule,
     FakeCommentModule,
     ProductReviewsModule,
+    PromosModule,
+    TypeOrmModule.forFeature([SeoEntity]),
   ],
-  providers: [],
+  providers: [TelegramService, SeoService],
   controllers: [AppController],
 })
 export class AppModule {}

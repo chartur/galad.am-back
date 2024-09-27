@@ -16,7 +16,6 @@ import { AdminGuard } from "../../shared/guards/admin.guard";
 import { ApiPaginatedResponse } from "../../core/decorators/api-paginated-response";
 import { PaginationResponseDto } from "../../core/dto/pagination-response.dto";
 import { OrderFilterDto } from "../../core/dto/order/order-filter.dto";
-import { ProductEntity } from "../../entities/product.entity";
 
 @ApiTags("Order")
 @ApiExtraModels(PaginationResponseDto)
@@ -33,7 +32,7 @@ export class OrderController {
   })
   @ApiResponse({
     status: 200,
-    description: "Record sucessfully created",
+    description: "Record successfully created",
     type: OrderEntity,
   })
   create(
