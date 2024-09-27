@@ -115,6 +115,13 @@ export class OrderEntity {
   orderProducts?: OrderProductEntity[];
 
   @ApiProperty({
+    example: "TEST150",
+    description: "The promo code used for the order",
+  })
+  @Column({ nullable: true })
+  promoUsed?: string;
+
+  @ApiProperty({
     example: "2011-10-05T14:48:00.000Z",
     description: "The creation date of order",
   })
