@@ -11,6 +11,9 @@ enum TelegramActions {
 export class TelegramService {
   private appUrl = "https://galad.am";
   private tChannelLink = "t.me/galad_am";
+  private botLink = "t.me/galad_am_bot";
+  private channelusername = -1002316754925;
+  private logoUrl = `${this.appUrl}/assets/logo.png`;
 
   private markup = Markup.inlineKeyboard(
     [
@@ -31,13 +34,27 @@ export class TelegramService {
     this.init();
   }
 
+  public sendMessageInTheChannel(message: string) {
+    const markup = Markup.inlineKeyboard([
+      Markup.button.url("🛒 Տեսնել ավելին", this.botLink),
+    ]);
+    this.bot.telegram.sendPhoto(
+      this.channelusername,
+      { url: this.logoUrl },
+      {
+        ...markup,
+        caption: message,
+      },
+    );
+  }
+
   private async init(): Promise<void> {
     const seo = await this.seoService.getPage(SeoPages.HomePage);
     this.bot = new Telegraf(process.env.telegramKey);
 
     this.bot.command("start", async (ctx) => {
       ctx.sendPhoto(
-        { url: `${this.appUrl}/assets/logo.png` },
+        { url: this.logoUrl },
         {
           ...this.markup,
           caption: seo.am_description,
@@ -47,6 +64,7 @@ export class TelegramService {
 
     this.bot.on("callback_query", (ctx) => {
       const action: string = (ctx.callbackQuery as any).data;
+      console.log(action);
       switch (action) {
         case TelegramActions.JOIN_CHANNEL:
           return this.joinCommunityChannelHandler(ctx);
